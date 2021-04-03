@@ -14,6 +14,20 @@ struct BadBase64CharacterError: Error, CustomStringConvertible {
     }
 }
 
+struct BadVLQStringError: Error, CustomStringConvertible {
+    let vlq: String
+    let soFar: [Int32]
+
+    init(vlq: String = "", soFar: [Int32] = []) {
+        self.vlq = vlq
+        self.soFar = soFar
+    }
+
+    var description: String {
+        "Can't decode VLQ string '\(vlq)' - got \(soFar) before failure"
+    }
+}
+
 /// Utilities for working with VLQs.
 ///
 /// Each segment of mapping data is a variable-length list of Int32s, VLQ Base64 encoded.
@@ -32,6 +46,8 @@ struct BadBase64CharacterError: Error, CustomStringConvertible {
 /// No base64 padding; Int32s being encoded do not span base64 characters / records.
 ///
 /// Spec says only 32-bit quantities are expected.
+///
+/// This hasn't been optimized at all.
 enum VLQ {
     /// Encode a single number as a Base64 VLQ
     /// XXX is this private?
@@ -59,7 +75,7 @@ enum VLQ {
     private struct Decoder {
         private enum State {
             case idle
-            case busy(sign: Bool, cur: Int, shift: Int)
+            case busy(sign: Bool, cur: Int64, shift: Int)
         }
         private var state: State
 
@@ -67,9 +83,16 @@ enum VLQ {
             state = .idle
         }
 
+        var isIdle: Bool {
+            switch state {
+            case .idle: return true
+            case .busy: return false
+            }
+        }
+
         mutating func decode(base64char: Character) throws -> Int32? {
             let sixBit: UInt8 = try Base64.shared.decode(base64char)
-            let fiveBit = Int(sixBit & 0x1f)
+            let fiveBit = Int64(sixBit & 0x1f)
             let continuation = (sixBit & 0x20) != 0
 
             switch state {
@@ -79,11 +102,13 @@ enum VLQ {
                 if !continuation {
                     return Int32((fiveBit >> 1) * (sign ? -1 : 1))
                 }
-                state = .busy(sign: sign, cur: fiveBit >> 1, shift: 4)
+                state = .busy(sign: sign, cur: Int64(fiveBit >> 1), shift: 4)
 
             case .busy(sign: let sign, cur: let cur, shift: let shift):
-                // XXX overflow
                 let new = cur | (fiveBit << shift)
+                if new > Int64(Int32.max) + 1 {
+                    throw BadVLQStringError()
+                }
                 if !continuation {
                     state = .idle
                     return Int32(new * (sign ? -1 : 1))
@@ -98,10 +123,16 @@ enum VLQ {
     static func decode(_ vlq: String) throws -> [Int32] {
         var decoder = Decoder()
         var output = [Int32]()
-        try vlq.forEach {
-            if let value = try decoder.decode(base64char: $0) {
-                output.append(value)
+        do {
+            try vlq.forEach {
+                if let value = try decoder.decode(base64char: $0) {
+                    output.append(value)
+                }
             }
+        } catch {
+        }
+        if !decoder.isIdle {
+            throw BadVLQStringError(vlq: vlq, soFar: output)
         }
         return output
     }
@@ -111,6 +142,9 @@ enum VLQ {
 ///
 /// Working on single units at a time - see header for why.
 /// SIngleton - access through `Base64.shared`.
+///
+/// my guess is that doing these in code will actually be more efficient
+/// than the lookup tables because of icache/dache.
 struct Base64 {
     private let encode: [Character] // index UInt6
     private let decode: [UInt8] // index ascii

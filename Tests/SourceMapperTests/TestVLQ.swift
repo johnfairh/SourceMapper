@@ -52,4 +52,17 @@ class TestVLQ: XCTestCase {
         let decoded = try VLQ.decode(encoded)
         XCTAssertEqual(data, decoded)
     }
+
+    func testBadVLQ() {
+        ["w", "wwwwwwwwwwwwww"].forEach { vlq in
+            do {
+                let decoded = try VLQ.decode(vlq)
+                print("Managed to decode bad string: \(decoded)")
+            } catch let error as BadVLQStringError {
+                print(error)
+            } catch {
+                XCTFail("Unexpected error: \(error)")
+            }
+        }
+    }
 }
