@@ -7,12 +7,15 @@
 //
 import Foundation
 
+/// Don't support extension fields ("x_|whatever|"): nobody seems to use them, even the one in the spec
+/// seems unknown today, and it immensely complicates the JSON layer.
+///
 /// 1 - open a sourcemap, mess around with it a bit, rewrite it,
 /// 2 - join multiple sourcemaps together
 /// 3 - open a sourcemap and use it, doing location queries including source file locations
 /// 4 - create a new sourcemap from scratch and write it to a file.
 ///
-struct SourceMap {
+public struct SourceMap {
     /// Create an empty source map.
     public init() {
         version = 3
@@ -23,20 +26,6 @@ struct SourceMap {
         mappings = ""
         mappingSegments = nil
         mappingsValid = true
-        extensions = [:]
-    }
-
-    /// Decode a source map from a JSON string as `Data`.
-    public init(data: Data) throws {
-        self.init()
-    }
-
-    /// Decode a source map from a JSON string.
-    ///
-    /// - throws: If the JSON is bad, the version is bad, or if mandatory fields are missing.
-    ///   The mappings aren't decoded until you access
-    public init(string: String) throws {
-        try self.init(data: string.data(using: .utf8)!)
     }
 
     /// The spec version that this source map follows.
@@ -109,14 +98,14 @@ struct SourceMap {
     }
 
     /// The mappings in their compacted format
-    public private(set) var mappings: String
+    public internal(set) var mappings: String
 
     /// Track consistency between `mappings` and `_mappingSegments`.
     /// If `false` then `mappings` need regenerating.
-    private var mappingsValid: Bool
+    internal var mappingsValid: Bool
 
     /// Cache of decoded mapping segments
-    private var mappingSegments: [[MappingSegment]]?
+    internal var mappingSegments: [[MappingSegment]]?
 
     private func unpackMappings() throws -> [[MappingSegment]] {
         []
@@ -158,25 +147,6 @@ struct SourceMap {
         nil
     }
 
-    /// Extension fields
-    public var extensions: [String:Any]
-
-    /// Encode the source map as a JSON string
-    ///
-    /// - parameter continueOnError: Set the error handling policy.  If `false` then
-    ///   any inconsistencies in the mapping data cause an error to be thrown, otherwise they
-    ///   are passed through to the JSON format.
-    ///
-    ///   The default is `true` which is probably right when working with existing sourcemaps,
-    ///   but if you're creating from scratch it may be more useful to set `false` to catch bugs
-    ///   in your generation code.
-    ///
-    /// - throws: If `continueOnError` is `false` and there is an error; or if JSON
-    ///   encoding fails for some reason.
-    public func encoded(continueOnError: Bool = true) throws -> String {
-        ""
-    }
-
     /// Append a second source map to this one.
     ///
     /// Used when the corresponding generated code files are appended.
@@ -185,14 +155,12 @@ struct SourceMap {
     /// this merge, otherwise the `sources` fields will be updated to include the different values of
     /// `sourceRoot` which will be tougher to unpick later if necessary.
     ///
-    /// Extension fields are preserved in the merged source map.
-    ///
     /// - parameter sourceMap: The source map to append to this one.
     /// - parameter generatedLineIndex: The 0-based index in the new  generated code file
     ///   where the `sourceMap` should start.
     /// - parameter generatedColumnIndex: The 0-based index in the new generated code file
     ///   where the `sourceMap` should start.
-    /// - throws: If both source maps contain the same extension field.
+    /// - throws: ???
     public mutating func append(sourceMap: SourceMap,
                                 generatedLineIndex: Int,
                                 generatedColumnIndex: Int) throws {
