@@ -15,10 +15,10 @@ import Foundation
 /// 3 - open a sourcemap and use it, doing location queries including source file locations
 /// 4 - create a new sourcemap from scratch and write it to a file.
 ///
-public struct SourceMap {
+public final class SourceMap {
     /// Create an empty source map.
-    public init() {
-        version = 3
+    public init(version: UInt = SourceMap.VERSION) {
+        self.version = version
         file = nil
         sourceRoot = nil
         sources = []
@@ -124,7 +124,7 @@ public struct SourceMap {
     /// - throws: If the mappings are undecodable in some way indicating a corrupt source map.
     ///   No error is thrown for invalid indicies - an `invalidSegment` is substituted and the offence
     ///   reported  in  `invalidSegmentReports`.
-    public mutating func getMappingSegments() throws -> [[MappingSegment]] {
+    public func getMappingSegments() throws -> [[MappingSegment]] {
         if let segments = mappingSegments {
             return segments
         }
@@ -132,7 +132,7 @@ public struct SourceMap {
     }
 
     /// Update the mapping segments.  No validation done against `sources` or `names`.
-    public mutating func setMappingSegments(_ segments: [[MappingSegment]]) {
+    public func setMappingSegments(_ segments: [[MappingSegment]]) {
         mappingSegments = segments
         mappingsValid = false
     }
@@ -143,7 +143,7 @@ public struct SourceMap {
     /// - parameter columnIndex: 0-based index of the column in `rowIndex`.
     /// - throws: If the mappings can't be decoded.  See `getMappingSegments()`.
     /// - returns: The mapping segment, or `nil` if there is no mapping for the row.
-    public mutating func map(rowIndex: Int, columnIndex: Int) throws -> MappingSegment? {
+    public func map(rowIndex: Int, columnIndex: Int) throws -> MappingSegment? {
         nil
     }
 
@@ -161,8 +161,8 @@ public struct SourceMap {
     /// - parameter generatedColumnIndex: The 0-based index in the new generated code file
     ///   where the `sourceMap` should start.
     /// - throws: ???
-    public mutating func append(sourceMap: SourceMap,
-                                generatedLineIndex: Int,
-                                generatedColumnIndex: Int) throws {
+    public func append(sourceMap: SourceMap,
+                       generatedLineIndex: Int,
+                       generatedColumnIndex: Int) throws {
     }
 }

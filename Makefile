@@ -8,7 +8,7 @@ build:
 swifttestflags := --enable-test-discovery --enable-code-coverage
 
 test:
-	swift test ${swifttestflags} ${libsass4flags}
+	swift test ${swifttestflags}
 
 test_linux:
 	docker run -v `pwd`:`pwd` -w `pwd` --name SourceMapper --rm swift:5.3 make test

@@ -12,7 +12,6 @@ import XCTest
 
 extension SourceMap: Equatable {
     public static func == (lhs: SourceMap, rhs: SourceMap) -> Bool {
-        var lhs = lhs, rhs = rhs
         let lhsJSON, rhsJSON : String
         do {
             lhsJSON = try lhs.encodeString()

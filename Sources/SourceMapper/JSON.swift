@@ -22,12 +22,12 @@ struct Err: Error {}
 
 extension SourceMap {
     /// Decode a source map from a JSON string as `Data`.
-    public init(data: Data) throws {
+    public convenience init(data: Data) throws {
         let decoded = try JSONDecoder().decode(SerializedSourceMap.self, from: data)
         if decoded.version != SourceMap.VERSION {
             throw Err()
         }
-        self.version = decoded.version
+        self.init(version: decoded.version)
         self.file = decoded.file
         self.sourceRoot = decoded.sourceRoot
 
@@ -59,7 +59,7 @@ extension SourceMap {
     ///
     /// - throws: If the JSON is bad, the version is bad, or if mandatory fields are missing.
     ///   The mappings aren't decoded until accessed.
-    public init(string: String) throws {
+    public convenience init(string: String) throws {
         try self.init(data: string.data(using: .utf8)!)
     }
 
@@ -75,7 +75,7 @@ extension SourceMap {
     ///
     /// - throws: If `continueOnError` is `false` and there is an error; or if JSON
     ///   encoding fails for some reason.
-    public mutating func encode(continueOnError: Bool = true) throws -> Data {
+    public func encode(continueOnError: Bool = true) throws -> Data {
         if !mappingsValid {
             try updateMappings(continueOnError: continueOnError)
         }
@@ -101,11 +101,11 @@ extension SourceMap {
     /// Validate any customizations and encode the source map as JSON in a string
     ///
     /// See `encode(contineOnError:)`.
-    public mutating func encodeString(continueOnError: Bool = true) throws -> String {
+    public func encodeString(continueOnError: Bool = true) throws -> String {
         String(data: try encode(continueOnError: continueOnError), encoding: .utf8)!
     }
 
-    private mutating func updateMappings(continueOnError: Bool) throws {
+    private func updateMappings(continueOnError: Bool) throws {
         precondition(mappingsValid)
     }
 }
