@@ -15,6 +15,7 @@ let package = Package(
         dependencies: []),
       .testTarget(
         name: "SourceMapperTests",
-        dependencies: ["SourceMapper"]),
+        dependencies: ["SourceMapper"],
+        exclude: ["Fixtures"]),
     ]
 )

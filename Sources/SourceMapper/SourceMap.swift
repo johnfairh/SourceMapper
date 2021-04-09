@@ -41,11 +41,28 @@ public final class SourceMap {
     public var sourceRoot: String?
 
     /// The location and content of an original source referred to from the source map.
-    /// The full URL of a source is computed by first prepending `sourceRoot`.  If that gives
-    /// an absolute URL then use it.  Otherwise resolve it relative to the URL of the source map.
+    ///
+    /// Use `getSourceURL(...)`to interpret source URLs incorporating `sourceRoot`.
     public enum Source {
         case remote(url: String)
         case inline(url: String, content: String)
+
+        /// The URL recorded in the source map for this source.
+        /// - see: `SourceMap.getSourceURL(...)`.
+        public var url: String {
+            switch self {
+            case .remote(let url),
+                 .inline(let url, _): return url
+            }
+        }
+
+        /// The content, if any, recorded in the source map for this source.
+        public var content: String? {
+            switch self {
+            case .remote: return nil
+            case .inline(_, let content): return content
+            }
+        }
     }
 
     /// The original sources referred to from the source map.
@@ -59,11 +76,11 @@ public final class SourceMap {
 
     /// Get the URL of a source, incorporating the `sourceRoot` if set.
     ///
-    /// - parameter sourceIndex: The index into `sources` to look up
+    /// - parameter sourceIndex: The index into `sources` to look up.
     /// - parameter sourceMapURL: The URL of this source map -- source URLs are calculated
     ///   relative to this location.
-    public func findSourceURL(sourceIndex: Int, sourceMapURL: URL) -> URL? {
-        nil
+    public func getSourceURL(sourceIndex: Int, sourceMapURL: URL) -> URL {
+        URL(fileURLWithPath: "/")
     }
 
     /// Names that can be associated with segments of the generated code.

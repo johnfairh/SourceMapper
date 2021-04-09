@@ -28,3 +28,27 @@ extension SourceMap: Equatable {
         return lhsJSON == rhsJSON
     }
 }
+
+extension SourceMap {
+    convenience init(url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    static let fixturesURL = URL(fileURLWithPath: #file)
+        .deletingLastPathComponent()
+        .appendingPathComponent("Fixtures")
+
+    convenience init(fixtureName: String) throws {
+        try self.init(url: Self.fixturesURL.appendingPathComponent(fixtureName))
+    }
+}
+
+func XCTAssertThrows<T: Error>(_ errType: T.Type, _ callback: () throws -> Void) {
+    do {
+        try callback()
+    } catch let error as T {
+        print(error)
+    } catch {
+        XCTFail("Unexpected error: \(error)")
+    }
+}

@@ -1,0 +1,73 @@
+//
+//  TestJSON.swift
+//  SourceMapperTests
+//
+//  Copyright 2021 SourceMapper contributors
+//  Licensed under MIT (https://github.com/johnfairh/SourceMapper/blob/main/LICENSE
+//
+
+@testable import SourceMapper
+import XCTest
+
+/// JSON code/decode logic and error handling
+class TestJSON: XCTestCase {
+    func testMissingFields() throws {
+        XCTAssertThrows(DecodingError.self) {
+            let map = try SourceMap(string: "{}")
+            XCTFail("Managed to decode bad map: \(map)")
+        }
+    }
+
+    func testBadVersion() throws {
+        let badVersionJSON = """
+        {
+          "version": 4,
+          "sources": [],
+          "names": [],
+          "mappings": ""
+        }
+        """
+
+        XCTAssertThrows(SourceMapError.self) {
+            let map = try SourceMap(string: badVersionJSON)
+            XCTFail("Managed to decode bad map: \(map)")
+        }
+    }
+
+    func testInconsistentSources() throws {
+        let badSourcesJSON = """
+        {
+          "version": 3,
+          "sources": ["a", "b", "c"],
+          "sourcesContent": ["contents of a", null],
+          "names": [],
+          "mappings": ""
+        }
+        """
+
+        XCTAssertThrows(SourceMapError.self) {
+            let map = try SourceMap(string: badSourcesJSON)
+            XCTFail("Managed to decode bad map: \(map)")
+        }
+    }
+
+    func testSourceContent() throws {
+        let sourcedJSON = """
+        {
+          "version": 3,
+          "sources": ["a", "b"],
+          "sourcesContent": ["contents of a", null],
+          "names": [],
+          "mappings": ""
+        }
+        """
+        let map = try SourceMap(string: sourcedJSON)
+        XCTAssertEqual(2, map.sources.count)
+        XCTAssertEqual("contents of a", map.sources[0].content)
+        XCTAssertNil(map.sources[1].content)
+
+        let encoded = try map.encode()
+        let map2 = try SourceMap(data: encoded)
+        XCTAssertEqual(map, map2)
+    }
+}

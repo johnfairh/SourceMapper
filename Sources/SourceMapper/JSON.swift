@@ -18,14 +18,12 @@ fileprivate struct SerializedSourceMap: Codable {
     let mappings: String
 }
 
-struct Err: Error {}
-
 extension SourceMap {
     /// Decode a source map from a JSON string as `Data`.
     public convenience init(data: Data) throws {
         let decoded = try JSONDecoder().decode(SerializedSourceMap.self, from: data)
         if decoded.version != SourceMap.VERSION {
-            throw Err()
+            throw SourceMapError.invalidFormat(decoded.version)
         }
         self.init(version: decoded.version)
         self.file = decoded.file
@@ -34,7 +32,8 @@ extension SourceMap {
         let contents: [String?]
         if let decodedContents = decoded.sourcesContent {
             guard decodedContents.count == decoded.sources.count else {
-                throw Err()
+                throw SourceMapError.inconsistentSources(sourcesCount: decoded.sources.count,
+                                                         sourcesContentCount: decodedContents.count)
             }
             contents = decodedContents
         } else {
@@ -107,21 +106,5 @@ extension SourceMap {
 
     private func updateMappings(continueOnError: Bool) throws {
         precondition(mappingsValid)
-    }
-}
-
-fileprivate extension SourceMap.Source {
-    var url: String {
-        switch self {
-        case .remote(let url),
-             .inline(let url, _): return url
-        }
-    }
-
-    var content: String? {
-        switch self {
-        case .remote: return nil
-        case .inline(_, let content): return content
-        }
     }
 }
