@@ -12,7 +12,7 @@ import XCTest
 /// JSON code/decode logic and error handling
 class TestJSON: XCTestCase {
     func testMissingFields() throws {
-        XCTAssertThrows(DecodingError.self) {
+        XCTAssertThrows(Swift.DecodingError.self) {
             let map = try SourceMap(string: "{}")
             XCTFail("Managed to decode bad map: \(map)")
         }
@@ -28,7 +28,7 @@ class TestJSON: XCTestCase {
         }
         """
 
-        XCTAssertThrows(SourceMapError.self) {
+        XCTAssertSourceMapError(.invalidFormat(4)) {
             let map = try SourceMap(string: badVersionJSON)
             XCTFail("Managed to decode bad map: \(map)")
         }
@@ -45,7 +45,7 @@ class TestJSON: XCTestCase {
         }
         """
 
-        XCTAssertThrows(SourceMapError.self) {
+        XCTAssertSourceMapError(.inconsistentSources(sourcesCount: 3, sourcesContentCount: 2)) {
             let map = try SourceMap(string: badSourcesJSON)
             XCTFail("Managed to decode bad map: \(map)")
         }

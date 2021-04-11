@@ -52,3 +52,14 @@ func XCTAssertThrows<T: Error>(_ errType: T.Type, _ callback: () throws -> Void)
         XCTFail("Unexpected error: \(error)")
     }
 }
+
+func XCTAssertSourceMapError(_ err: SourceMapError, _ callback: () throws -> Void) {
+    do {
+        try callback()
+    } catch let error as SourceMapError {
+        XCTAssertEqual(err, error)
+        print(error)
+    } catch {
+        XCTFail("Unexpected error: \(error)")
+    }
+}

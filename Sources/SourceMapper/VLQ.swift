@@ -6,28 +6,6 @@
 //  Licensed under MIT (https://github.com/johnfairh/SourceMapper/blob/main/LICENSE
 //
 
-// TODO where to put these
-struct BadBase64CharacterError: Error, CustomStringConvertible {
-    let description: String
-    init(_ char: Character) {
-        description = "Can't decode as base64 character: \(char)"
-    }
-}
-
-struct BadVLQStringError: Error, CustomStringConvertible {
-    let vlq: String
-    let soFar: [Int32]
-
-    init(vlq: String = "", soFar: [Int32] = []) {
-        self.vlq = vlq
-        self.soFar = soFar
-    }
-
-    var description: String {
-        "Can't decode VLQ string '\(vlq)' - got \(soFar) before failure"
-    }
-}
-
 /// Utilities for working with VLQs.
 ///
 /// Each segment of mapping data is a variable-length list of Int32s, VLQ Base64 encoded.
@@ -71,6 +49,8 @@ enum VLQ {
         ints.map { encode($0) }.joined()
     }
 
+    private struct Err: Error {}
+
     /// Progressive decoder of VLQ Base64 values
     private struct Decoder {
         private enum State {
@@ -107,7 +87,7 @@ enum VLQ {
             case .busy(sign: let sign, cur: let cur, shift: let shift):
                 let new = cur | (fiveBit << shift)
                 if new > Int64(Int32.max) + 1 {
-                    throw BadVLQStringError()
+                    throw Err()
                 }
                 if !continuation {
                     state = .idle
@@ -132,7 +112,7 @@ enum VLQ {
         } catch {
         }
         if !decoder.isIdle {
-            throw BadVLQStringError(vlq: vlq, soFar: output)
+            throw SourceMapError.badVLQString(vlq: vlq, soFar: output)
         }
         return output
     }
@@ -175,7 +155,7 @@ struct Base64 {
         guard let asciiVal = char.asciiValue,
               case let decoded = decode[Int(asciiVal)],
               decoded != Base64.INVALID else {
-            throw BadBase64CharacterError(char)
+            throw SourceMapError.badBase64Character(char)
         }
         return decoded
     }
