@@ -103,8 +103,4 @@ extension SourceMap {
     public func encodeString(continueOnError: Bool = true) throws -> String {
         String(data: try encode(continueOnError: continueOnError), encoding: .utf8)!
     }
-
-    private func updateMappings(continueOnError: Bool) throws {
-        precondition(mappingsValid)
-    }
 }

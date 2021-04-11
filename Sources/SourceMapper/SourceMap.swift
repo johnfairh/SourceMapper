@@ -124,45 +124,12 @@ public final class SourceMap {
     /// Cache of decoded mapping segments
     internal var mappingSegments: [[MappingSegment]]?
 
-    private func unpackMappings() throws -> [[MappingSegment]] {
-        []
-    }
-
     /// Value to use in place of a segment mapping that references an invalid source or name index.
     /// By default a `MappingSegment` containing all zero indicies is used.
     public var invalidSegment: MappingSegment? = nil
 
     /// Debug log of invalid indices found while unpacking mappings.
     public private(set) var invalidSegmentReports: [String] = []
-
-    /// One list of `MappingSegment`s for every line in the generated code file.
-    ///
-    /// Decodes the mappings if necessary.
-    /// - throws: If the mappings are undecodable in some way indicating a corrupt source map.
-    ///   No error is thrown for invalid indicies - an `invalidSegment` is substituted and the offence
-    ///   reported  in  `invalidSegmentReports`.
-    public func getMappingSegments() throws -> [[MappingSegment]] {
-        if let segments = mappingSegments {
-            return segments
-        }
-        return try unpackMappings()
-    }
-
-    /// Update the mapping segments.  No validation done against `sources` or `names`.
-    public func setMappingSegments(_ segments: [[MappingSegment]]) {
-        mappingSegments = segments
-        mappingsValid = false
-    }
-
-    /// Map a location in the generated code to its source.
-    ///
-    /// - parameter rowIndex: 0-based index of the row in the generated code file.
-    /// - parameter columnIndex: 0-based index of the column in `rowIndex`.
-    /// - throws: If the mappings can't be decoded.  See `getMappingSegments()`.
-    /// - returns: The mapping segment, or `nil` if there is no mapping for the row.
-    public func map(rowIndex: Int, columnIndex: Int) throws -> MappingSegment? {
-        nil
-    }
 
     /// Append a second source map to this one.
     ///

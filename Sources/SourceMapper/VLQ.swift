@@ -100,7 +100,7 @@ enum VLQ {
     }
 
     /// Decode a Base64 VLQ string into a list of numbers.
-    static func decode(_ vlq: String) throws -> [Int32] {
+    static func decode<S: StringProtocol>(_ vlq: S) throws -> [Int32] {
         var decoder = Decoder()
         var output = [Int32]()
         do {
@@ -112,7 +112,7 @@ enum VLQ {
         } catch {
         }
         if !decoder.isIdle {
-            throw SourceMapError.badVLQString(vlq: vlq, soFar: output)
+            throw SourceMapError.badVLQString(vlq: String(vlq), soFar: output)
         }
         return output
     }
