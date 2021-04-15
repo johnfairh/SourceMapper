@@ -29,8 +29,8 @@ class TestBasics: XCTestCase {
             XCTAssertTrue(map.sources[0].url.hasSuffix("jazzy.css.scss"))
             // add a couple of map tests
 
-            let mappings = try map.unpackMappings()
-            print(mappings)
+            let mappings = try map.getSegments()
+            print(mappings.mappingsDescription)
         }
     }
 }

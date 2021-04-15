@@ -24,7 +24,7 @@ public final class SourceMap {
         sources = []
         names = []
         mappings = ""
-        mappingSegments = nil
+        segments = nil
         mappingsValid = true
     }
 
@@ -92,26 +92,73 @@ public final class SourceMap {
         }
     }
 
+    /// A position in an original source file.  Only has meaning in the context of a `SourceMap`.
+    public struct SourcePos {
+        /// 0-based index into `SourceMap.sources` of the original source.
+        public let source: Int32
+        /// 0-based line index into the original source file.
+        public let line: Int32
+        /// 0-based column index into line `lineIndex`.
+        public let column: Int32
+        /// 0-based index into `SourceMap.names` of any name associated with
+        /// the mapping segment, or `nil` if there is none.
+        public let name: Int32?
+
+        /// Initialize a new `SourcePos`.
+        public init(source: Int32,
+                    line: Int32,
+                    column: Int32,
+                    name: Int32? = nil) {
+            self.source = source
+            self.line = line
+            self.column = column
+            self.name = name
+        }
+    }
+
     /// A decoded segment of the source map.
     ///
     /// This maps a region from a particular generated line (not explicit in this type)
-    /// and start column to some source region and optionally a name.  The generated
-    /// end column is not explicit in the type.
-    public struct MappingSegment {
-        /// 0-based column in the generated code being mapped from.  The mapping lasts
-        /// until either the end of the generated line or the `generatedColumnIndex` of
-        /// the next mapping segment.
-        public let generatedColumnIndex: Int32
-        /// 0-based index into `sources` of the segment's original source.
-        public let sourceIndex: Int32
-        /// 0-based line index into the original source.
-        public let sourceLineIndex: Int32
-        /// 0-based column index into the `sourceLineIndex`.  The end of the mapping
-        /// is not defined.
-        public let sourceColumnIndex: Int32
-        /// 0-based index into `names` of the name associated with the segment, or `nil`
-        /// if there is none.
-        public let nameIndex: Int32?
+    /// and column range (really just start column) to a source region and optionally a name, or
+    /// asserts that range is not related to a source.
+    ///
+    /// All indices are 0-based.
+    public struct Segment {
+        /// 0-based column in the generated code that starts the segment.
+        public let firstColumn: Int32
+
+        /// 0-based column in the generated code that ends the segment, or `nil`
+        /// indicating 'until either the next segment or the end of the line'.
+        public let lastColumn: Int32?
+
+        /// The range of columns covered by this segment, or `nil` if not known.
+        public var columns: ClosedRange<Int32>? {
+            lastColumn.flatMap { firstColumn...$0 }
+        }
+
+        /// The original source position associated with the segment, or `nil` if there is none.
+        public let sourcePos: SourcePos?
+
+        /// Initialize a segment from column indices.
+        public init(firstColumn: Int32, lastColumn: Int32? = nil, sourcePos: SourcePos? = nil) {
+            self.firstColumn = firstColumn
+            self.lastColumn = lastColumn
+            self.sourcePos = sourcePos
+        }
+
+        /// Initialize a segment from a `Range` of columns.
+        public init(columns: Range<Int32>, sourcePos: SourcePos? = nil) {
+            self.init(firstColumn: columns.lowerBound,
+                      lastColumn: columns.upperBound - 1,
+                      sourcePos: sourcePos)
+        }
+
+        /// Initialize a segment from a `ClosedRange` of columns.
+        public init(columns: ClosedRange<Int32>, sourcePos: SourcePos? = nil) {
+            self.init(firstColumn: columns.lowerBound,
+                      lastColumn: columns.upperBound,
+                      sourcePos: sourcePos)
+        }
     }
 
     /// The mappings in their compacted format
@@ -122,11 +169,11 @@ public final class SourceMap {
     internal var mappingsValid: Bool
 
     /// Cache of decoded mapping segments
-    internal var mappingSegments: [[MappingSegment]]?
+    internal var segments: [[Segment]]?
 
     /// Value to use in place of a segment mapping that references an invalid source or name index.
-    /// By default a `MappingSegment` containing all zero indicies is used.
-    public var invalidSegment: MappingSegment? = nil
+    /// By default the `SourcePos` is omitted from the `Segment`.
+    public var invalidSourcePos: SourcePos? = nil
 
     /// Debug log of invalid indices found while unpacking mappings.
     public private(set) var invalidSegmentReports: [String] = []
@@ -148,5 +195,48 @@ public final class SourceMap {
     public func append(sourceMap: SourceMap,
                        generatedLineIndex: Int,
                        generatedColumnIndex: Int) throws {
+    }
+}
+
+// MARK: Printers
+
+extension SourceMap.SourcePos: CustomStringConvertible {
+    /// A short human-readable description of the position.
+    public var description: String {
+        "source=\(source) line=\(line) col=\(column)\(name.flatMap { " name=\($0)" } ?? "")"
+    }
+}
+
+extension SourceMap.Segment: CustomStringConvertible {
+    /// A short human-readable description of the segment.
+    public var description: String {
+        let range = "col=\(firstColumn)\(lastColumn.flatMap { "-\($0)" } ?? "")"
+        let content = sourcePos.flatMap { "(\($0))" } ?? "unmapped"
+        return "\(range) \(content)"
+    }
+}
+
+extension Sequence where Element: Collection, Element.Element == SourceMap.Segment {
+    /// A formatted multi-line string describing the mappings.
+    /// XXX rework as SourceMap method?
+    public var mappingsDescription: String {
+        var line = 0
+        var lines: [String] = []
+        forEach {
+            let lineIntro = "line=\(line) "
+            let introLen = lineIntro.count
+            let introPad = String(repeating: " ", count: introLen)
+            var intro = lineIntro
+            line += 1
+            if $0.count == 0 {
+                lines.append(intro)
+            } else {
+                $0.forEach {
+                    lines.append("\(intro)\($0)")
+                    intro = introPad
+                }
+            }
+        }
+        return lines.joined(separator: "\n")
     }
 }

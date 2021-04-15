@@ -51,7 +51,7 @@ extension SourceMap {
 
         self.mappings = decoded.mappings
         self.mappingsValid = true
-        self.mappingSegments = nil
+        self.segments = nil
     }
 
     /// Decode a source map from a JSON string.
