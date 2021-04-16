@@ -171,13 +171,6 @@ public final class SourceMap {
     /// Cache of decoded mapping segments
     internal var segments: [[Segment]]?
 
-    /// Value to use in place of a segment mapping that references an invalid source or name index.
-    /// By default the `SourcePos` is omitted from the `Segment`.
-    public var invalidSourcePos: SourcePos? = nil
-
-    /// Debug log of invalid indices found while unpacking mappings.
-    public private(set) var invalidSegmentReports: [String] = []
-
     /// Append a second source map to this one.
     ///
     /// Used when the corresponding generated code files are appended.

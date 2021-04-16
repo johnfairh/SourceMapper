@@ -15,10 +15,13 @@ public enum SourceMapError: Error, CustomStringConvertible, Equatable {
     case inconsistentSources(sourcesCount: Int, sourcesContentCount: Int)
 
     /// Source map decoding failed because of a bad character in the `mappings` field.
-    case badBase64Character(Character)
+    case invalidBase64Character(Character)
 
     /// Source map decoding failed because a VLQ sequence did not terminate properly.
-    case badVLQString(vlq: String, soFar: [Int32])
+    case invalidVLQStringUnterminated(vlq: String, soFar: [Int32])
+
+    /// Source map decoding failed because a VLQ sequence had too many entries.
+    case invalidVLQStringLength([Int32])
 
     /// A short human-readable description of the error
     public var description: String {
@@ -27,10 +30,12 @@ public enum SourceMapError: Error, CustomStringConvertible, Equatable {
             return "Invalid value for `format` field: \(format)"
         case .inconsistentSources(let sourcesCount, let sourcesContentCount):
             return "Inconsistent source map, \(sourcesCount) sources[] but \(sourcesContentCount) sourcesContent[]"
-        case .badBase64Character(let character):
+        case .invalidBase64Character(let character):
             return "Invalid Base64 character in `mappings`: \(character)"
-        case .badVLQString(let vlq, let soFar):
+        case .invalidVLQStringUnterminated(let vlq, let soFar):
             return "Invalid VLQ string '\(vlq)' - got \(soFar) before failure"
+        case .invalidVLQStringLength(let decoded):
+            return "Invalid mapping segment, bad number of entries: \(decoded)"
         }
     }
 }

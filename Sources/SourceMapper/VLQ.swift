@@ -28,7 +28,6 @@
 /// This hasn't been optimized at all.
 enum VLQ {
     /// Encode a single number as a Base64 VLQ
-    /// XXX is this private?
     static func encode(_ int: Int32) -> String {
         var value = int.magnitude
         var sixBits = [UInt8]()
@@ -112,7 +111,7 @@ enum VLQ {
         } catch {
         }
         if !decoder.isIdle {
-            throw SourceMapError.badVLQString(vlq: String(vlq), soFar: output)
+            throw SourceMapError.invalidVLQStringUnterminated(vlq: String(vlq), soFar: output)
         }
         return output
     }
@@ -155,7 +154,7 @@ struct Base64 {
         guard let asciiVal = char.asciiValue,
               case let decoded = decode[Int(asciiVal)],
               decoded != Base64.INVALID else {
-            throw SourceMapError.badBase64Character(char)
+            throw SourceMapError.invalidBase64Character(char)
         }
         return decoded
     }

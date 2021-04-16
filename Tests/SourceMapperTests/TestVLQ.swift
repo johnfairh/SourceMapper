@@ -23,7 +23,7 @@ class TestVLQ: XCTestCase {
 
     func testBadBase64() {
         [".", "ä"].map { $0.first! }.forEach { ch in
-            XCTAssertSourceMapError(.badBase64Character(ch)) {
+            XCTAssertSourceMapError(.invalidBase64Character(ch)) {
                 let val = try Base64.shared.decode(ch)
                 XCTFail("Managed to decode \(ch): \(val)")
             }
@@ -51,7 +51,7 @@ class TestVLQ: XCTestCase {
 
     func testBadVLQ() {
         ["w", "wwwwwwwwwwwwww"].forEach { vlq in
-            XCTAssertSourceMapError(.badVLQString(vlq: vlq, soFar: [])) {
+            XCTAssertSourceMapError(.invalidVLQStringUnterminated(vlq: vlq, soFar: [])) {
                 let decoded = try VLQ.decode(vlq)
                 print("Managed to decode bad string: \(decoded)")
             }

@@ -19,18 +19,30 @@ class TestBasics: XCTestCase {
     }
 
     func testLoading() throws {
-        try ["jazzy.css.map.dart", "jazzy.css.map.libsass"].forEach {
-            let map = try SourceMap(fixtureName: $0)
+        try ["jazzy.css.map.dart", "jazzy.css.map.libsass"].forEach { fixtureName in
+            let map = try SourceMap(fixtureName: fixtureName)
             XCTAssertEqual(SourceMap.VERSION, map.version)
             if let file = map.file {
                 XCTAssertEqual("jazzy.css.css", file)
             }
             XCTAssertEqual(1, map.sources.count)
             XCTAssertTrue(map.sources[0].url.hasSuffix("jazzy.css.scss"))
-            // add a couple of map tests
 
             let mappings = try map.getSegments()
             print(mappings.mappingsDescription)
+
+            // stubborn libsass...
+            let row: Int
+            if fixtureName.contains("dart") {
+                row = 30
+            } else {
+                row = 26
+            }
+
+            let mapped = try XCTUnwrap(try map.map(line: row, column: 22))
+            let pos = try XCTUnwrap(mapped.sourcePos)
+            XCTAssertEqual(25, pos.line)
+            XCTAssertTrue(pos.column >= 14)
         }
     }
 }
