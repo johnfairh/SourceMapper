@@ -19,7 +19,7 @@ extension SourceMap {
         if let segments = segments {
             return segments
         }
-        let newSegments = try unpackMappings()
+        let newSegments = try decodeMappings()
         segments = newSegments
         return newSegments
     }
@@ -31,72 +31,35 @@ extension SourceMap {
     }
 
     /// Unpack the `mappings` string
-    private func unpackMappings() throws -> [[Segment]] {
-        var source = Int32(0)
-        var sourceLine = Int32(0)
-        var sourceColumn = Int32(0)
-        var name = Int32(0)
+    private func decodeMappings() throws -> [[Segment]] {
+        var coder = MappingCoder()
 
         return try mappings.split(separator: ";", omittingEmptySubsequences: false).map { line in
-            var generatedColumn = Int32(0)
-            return try line.split(separator: ",").map {
-                let numbers = try VLQ.decode($0)
-                let seg: Segment
-
-                func makeSeg(name: Int32? = nil) -> Segment {
-                    let pos = SourcePos(source: source + numbers[1],
-                                        line: sourceLine + numbers[2],
-                                        column: sourceColumn + numbers[3],
-                                        name: name)
-                    return Segment(firstColumn: generatedColumn + numbers[0],
-                                   sourcePos: pos)
-                }
-
-                switch numbers.count {
-                case 1:
-                    seg = Segment(firstColumn: generatedColumn + numbers[0])
-                case 4:
-                    seg = makeSeg()
-                case 5:
-                    name += numbers[4]
-                    seg = makeSeg(name: name)
-                default:
-                    throw SourceMapError.invalidVLQStringLength(numbers)
-                }
-
-                generatedColumn = seg.firstColumn
-                seg.sourcePos.flatMap { pos in
-                    source = pos.source
-                    sourceLine = pos.line
-                    sourceColumn = pos.column
-                }
-                return seg
+            coder.newLine()
+            var lineSegs = try line.split(separator: ",").map {
+                try Segment(values: coder.decodeValues(deltas: try VLQ.decode($0)))
             }
+            if lineSegs.count > 1 {
+                for i in 0..<lineSegs.count - 1 {
+                    lineSegs[i].lastColumn = lineSegs[i+1].firstColumn - 1
+                }
+            }
+            return lineSegs
         }
     }
 
-
-    func updateMappings(continueOnError: Bool) throws {
-        var counters = [Int32](repeating: 0, count: 5)
-
-        // interview question: name this routine.
-        func updateCountersFindDelta(segValues: [Int32]) -> [Int32] {
-            segValues.enumerated().map { (n, value) in
-                let newValue = value - counters[n]
-                counters[n] = value
-                return newValue
-            }
-        }
+    /// Update the `mappings` string from the segments data
+    func encodeMappings(continueOnError: Bool) throws {
+        var coder = MappingCoder()
 
         precondition(!mappingsValid)
         let lineStrings = try getSegments().map { line -> String in
-            counters[0] = 0
+            coder.newLine()
             return try line.map { segment in
                 if !continueOnError {
                     try segment.sourcePos?.check(sourceCount: sources.count, namesCount: names.count)
                 }
-                let delta = updateCountersFindDelta(segValues: segment.values)
-                return VLQ.encode(delta)
+                return VLQ.encode(coder.encodeDeltas(values: segment.values))
             }.joined(separator: ",")
         }
 
@@ -158,10 +121,47 @@ extension SourceMap {
     }
 }
 
+// MARK: Mapping segment delta tracking
+
+private struct MappingCoder {
+    static let LENGTH = 5
+    private var counters: [Int32]
+
+    init() {
+        counters = .init(repeating: 0, count: Self.LENGTH)
+    }
+
+    /// new line - reset column counter
+    mutating func newLine() {
+        counters[0] = 0
+    }
+
+    /// encode: given a list of segment values, return the delta for storing in mappings
+    mutating func encodeDeltas(values: [Int32]) -> [Int32] {
+        values.enumerated().map { (n, value) in
+            let newValue = value - counters[n]
+            counters[n] = value
+            return newValue
+        }
+    }
+
+    /// decode: given a list of deltas, return the absolute values
+    mutating func decodeValues(deltas: [Int32]) -> [Int32] {
+        deltas.prefix(Self.LENGTH).enumerated().map { (n, delta) in
+            let newValue = counters[n] + delta
+            counters[n] = newValue
+            return newValue
+        }
+    }
+}
+
 extension SourceMap.SourcePos {
-    /// Version of this pos with any `name` erased
-    var withoutName: Self {
-        Self(source: source, line: line, column: column)
+    /// Init from a list of values in sourcemap spec order.  Index 0 is the generated file column index.
+    init(values: [Int32]) {
+        self.init(source: values[1],
+                  line: values[2],
+                  column: values[3],
+                  name: values.count > 4 ? values[5] : nil)
     }
 
     /// The list of numbers making up the pos part of the segment, in sourcemap spec order
@@ -171,6 +171,36 @@ extension SourceMap.SourcePos {
             arr.append(name)
         }
         return arr
+    }
+}
+
+extension SourceMap.Segment {
+    /// Init from a list of values in sourcemap spec order
+    init(values: [Int32]) throws {
+        switch values.count {
+        case 1:
+            self.init(firstColumn: values[0])
+        case 4, 5:
+            self.init(firstColumn: values[0], sourcePos: .init(values: values))
+        default:
+            throw SourceMapError.invalidVLQStringLength(values)
+        }
+    }
+
+    /// The list of numbers making up the segment, in sourcemap spec order
+    var values: [Int32] {
+        var vals = [firstColumn]
+        sourcePos.flatMap { vals += $0.values }
+        return vals
+    }
+}
+
+// MARK: Validation and fixups
+
+extension SourceMap.SourcePos {
+    /// Version of this pos with any `name` erased
+    var withoutName: Self {
+        Self(source: source, line: line, column: column)
     }
 
     /// Validate `source` and `name` are in range
@@ -195,12 +225,5 @@ extension SourceMap.Segment {
         Self(firstColumn: firstColumn,
              lastColumn: lastColumn,
              sourcePos: sourcePos)
-    }
-
-    /// The list of numbers making up the segment, in sourcemap spec order
-    var values: [Int32] {
-        var vals = [firstColumn]
-        sourcePos.flatMap { vals += $0.values }
-        return vals
     }
 }

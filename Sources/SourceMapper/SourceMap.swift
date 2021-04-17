@@ -129,7 +129,7 @@ public final class SourceMap {
 
         /// 0-based column in the generated code that ends the segment, or `nil`
         /// indicating 'until either the next segment or the end of the line'.
-        public let lastColumn: Int32?
+        public internal(set) var lastColumn: Int32?
 
         /// The range of columns covered by this segment, or `nil` if not known.
         public var columns: ClosedRange<Int32>? {

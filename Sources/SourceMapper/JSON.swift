@@ -76,7 +76,7 @@ extension SourceMap {
     ///   encoding fails for some reason.
     public func encode(continueOnError: Bool = true) throws -> Data {
         if !mappingsValid {
-            try updateMappings(continueOnError: continueOnError)
+            try encodeMappings(continueOnError: continueOnError)
         }
         var anyContent = false
         let sourceLists: ([String], [String?]) = sources.reduce(into: ([], [])) { r, s in
