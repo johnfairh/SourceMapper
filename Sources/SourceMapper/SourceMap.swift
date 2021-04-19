@@ -93,7 +93,7 @@ public final class SourceMap {
     }
 
     /// A position in an original source file.  Only has meaning in the context of a `SourceMap`.
-    public struct SourcePos {
+    public struct SourcePos: Hashable {
         /// 0-based index into `SourceMap.sources` of the original source.
         public let source: Int32
         /// 0-based line index into the original source file.
@@ -123,12 +123,16 @@ public final class SourceMap {
     /// asserts that range is not related to a source.
     ///
     /// All indices are 0-based.
-    public struct Segment {
+    public struct Segment: Hashable {
         /// 0-based column in the generated code that starts the segment.
         public let firstColumn: Int32
 
         /// 0-based column in the generated code that ends the segment, or `nil`
         /// indicating 'until either the next segment or the end of the line'.
+        ///
+        /// This field is optional and advisory - it's not stored in the sourcemap itself, rather
+        /// calculated (guessed) from the next `firstColumn` value.  Its value is not
+        /// used in comparisons between two `Segment`s.
         public internal(set) var lastColumn: Int32?
 
         /// The range of columns covered by this segment, or `nil` if not known.
@@ -158,6 +162,18 @@ public final class SourceMap {
             self.init(firstColumn: columns.lowerBound,
                       lastColumn: columns.upperBound,
                       sourcePos: sourcePos)
+        }
+
+        /// Compare two segments.  The `lastColumn` value is not included.
+        public static func == (lhs: Segment, rhs: Segment) -> Bool {
+            lhs.firstColumn == rhs.firstColumn &&
+                lhs.sourcePos == rhs.sourcePos
+        }
+
+        /// Hash the segment.
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(firstColumn)
+            hasher.combine(sourcePos)
         }
     }
 

@@ -31,18 +31,26 @@ class TestBasics: XCTestCase {
             let mappings = try map.getSegments()
             print(mappings.mappingsDescription)
 
+            // Check a couple of mapping positions, one towards the start and
+            // one at the end to check the mapping accumulators.
+
             // stubborn libsass...
-            let row: Int
+            let rows: [Int]
             if fixtureName.contains("dart") {
-                row = 30
+                rows = [30, 510]
             } else {
-                row = 26
+                rows = [26, 465]
             }
 
-            let mapped = try XCTUnwrap(try map.map(line: row, column: 22))
-            let pos = try XCTUnwrap(mapped.sourcePos)
-            XCTAssertEqual(25, pos.line)
-            XCTAssertTrue(pos.column >= 14)
+            let mapped1 = try XCTUnwrap(try map.map(line: rows[0], column: 22))
+            let pos1 = try XCTUnwrap(mapped1.sourcePos)
+            XCTAssertEqual(25, pos1.line)
+            XCTAssertTrue(pos1.column >= 14)
+
+            let mapped2 = try XCTUnwrap(try map.map(line: rows[1], column: 12))
+            let pos2 = try XCTUnwrap(mapped2.sourcePos)
+            XCTAssertEqual(601, pos2.line)
+            XCTAssertTrue(pos2.column >= 4)
         }
     }
 }

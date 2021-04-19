@@ -161,7 +161,7 @@ extension SourceMap.SourcePos {
         self.init(source: values[1],
                   line: values[2],
                   column: values[3],
-                  name: values.count > 4 ? values[5] : nil)
+                  name: values.count > 4 ? values[4] : nil)
     }
 
     /// The list of numbers making up the pos part of the segment, in sourcemap spec order
