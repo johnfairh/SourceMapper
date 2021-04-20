@@ -112,12 +112,14 @@ extension SourceMap {
             segment = segment.withoutSourceName
         }
 
-        if let sourcePos = segment.sourcePos,
-           sourcePos.source < sources.count {
+        guard let sourcePos = segment.sourcePos else {
             return segment
         }
-
-        return segment.with(sourcePos: invalidSourcePos)
+        
+        guard sourcePos.source < sources.count else {
+            return segment.with(sourcePos: invalidSourcePos)
+        }
+        return segment
     }
 }
 
@@ -206,10 +208,10 @@ extension SourceMap.SourcePos {
     /// Validate `source` and `name` are in range
     func check(sourceCount: Int, namesCount: Int) throws {
         if source >= sourceCount {
-            preconditionFailure()
+            throw SourceMapError.invalidSource(Int(source), count: sourceCount)
         }
         if let name = name, name >= namesCount {
-            preconditionFailure()
+            throw SourceMapError.invalidName(Int(name), count: namesCount)
         }
     }
 }

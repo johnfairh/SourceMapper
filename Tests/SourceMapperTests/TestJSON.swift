@@ -70,4 +70,19 @@ class TestJSON: XCTestCase {
         let map2 = try SourceMap(data: encoded)
         XCTAssertEqual(map, map2)
     }
+
+    func testBadMapping() throws {
+        let json = """
+        {
+          "version": 3,
+          "sources": ["a"],
+          "names": [],
+          "mappings": "AAA"
+        }
+        """
+        let map = try SourceMap(string: json)
+        XCTAssertSourceMapError(.invalidVLQStringLength([0,0,0])) {
+            _ = try map.getSegments()
+        }
+    }
 }
