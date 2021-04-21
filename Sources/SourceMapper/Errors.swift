@@ -9,7 +9,7 @@
 /// Error conditions detected by the module.
 public enum SourceMapError: Error, CustomStringConvertible, Equatable {
     /// Source map decoding failed because the `format` field's value is invalid.
-    case invalidFormat(UInt)
+    case invalidFormat(Int)
 
     /// Source map decoding failed because the `sources` and `sourcesContent` fields have different cardinalities.
     case inconsistentSources(sourcesCount: Int, sourcesContentCount: Int)

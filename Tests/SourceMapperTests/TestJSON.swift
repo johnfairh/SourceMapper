@@ -80,9 +80,8 @@ class TestJSON: XCTestCase {
           "mappings": "AAA"
         }
         """
-        let map = try SourceMap(string: json)
         XCTAssertSourceMapError(.invalidVLQStringLength([0,0,0])) {
-            _ = try map.getSegments()
+            _ = try SourceMap(string: json, checkMappings: true)
         }
     }
 }

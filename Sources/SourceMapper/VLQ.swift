@@ -19,7 +19,7 @@
 ///
 /// Decoding is more painful but again it seems better to process each Base64-encoded record at a time,
 /// rather than decode the whole lot and then unpick the 6-bit records -- especially given the quantities
-/// are low (max 5 Int32s, typically 1, typically 1-2 records per).
+/// are low (max 5 Int32s, typically 4, typically 1-2 records per).
 ///
 /// No base64 padding; Int32s being encoded do not span base64 characters / records.
 ///

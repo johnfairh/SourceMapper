@@ -22,7 +22,7 @@ class TestMappings: XCTestCase {
         let mapSegs = try map.getSegments()
         let newMapSegs = try newMap.getSegments()
         if mapSegs != newMapSegs {
-            print("mapSegs:\n\(mapSegs.mappingsDescription)\nnewMapSegs:\n\(newMapSegs.mappingsDescription)")
+            print("mapSegs:\n\(try map.getSegmentsDescription())\nnewMapSegs:\n\(try newMap.getSegmentsDescription())")
             XCTFail("Map segs not equal")
         }
     }

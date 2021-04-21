@@ -17,7 +17,7 @@ import Foundation
 ///
 public final class SourceMap {
     /// Create an empty source map.
-    public init(version: UInt = SourceMap.VERSION) {
+    public init(version: Int = SourceMap.VERSION) {
         self.version = version
         file = nil
         sourceRoot = nil
@@ -29,10 +29,10 @@ public final class SourceMap {
     }
 
     /// The spec version that this source map follows.
-    public let version: UInt
+    public let version: Int
 
     /// The expected version - 3 - of source maps.
-    public static let VERSION = UInt(3)
+    public static let VERSION = 3
 
     /// The name of the generated code file with which the source map is associated.
     public var file: String?
@@ -186,25 +186,6 @@ public final class SourceMap {
 
     /// Cache of decoded mapping segments
     internal var segments: [[Segment]]?
-
-    /// Append a second source map to this one.
-    ///
-    /// Used when the corresponding generated code files are appended.
-    ///
-    /// If your source maps are using `sourceRoot` then you should ideally sync them before
-    /// this merge, otherwise the `sources` fields will be updated to include the different values of
-    /// `sourceRoot` which will be tougher to unpick later if necessary.
-    ///
-    /// - parameter sourceMap: The source map to append to this one.
-    /// - parameter generatedLineIndex: The 0-based index in the new  generated code file
-    ///   where the `sourceMap` should start.
-    /// - parameter generatedColumnIndex: The 0-based index in the new generated code file
-    ///   where the `sourceMap` should start.
-    /// - throws: ???
-    public func append(sourceMap: SourceMap,
-                       generatedLineIndex: Int,
-                       generatedColumnIndex: Int) throws {
-    }
 }
 
 // MARK: Printers
@@ -225,13 +206,14 @@ extension SourceMap.Segment: CustomStringConvertible {
     }
 }
 
-extension Sequence where Element: Collection, Element.Element == SourceMap.Segment {
-    /// A formatted multi-line string describing the mappings.
-    /// XXX rework as SourceMap method?
-    public var mappingsDescription: String {
+extension SourceMap {
+    /// A formatted multi-line string describing the mapping segments.
+    ///
+    /// - throws: something if the mapping segments can't be decoded from the source.
+    public func getSegmentsDescription() throws -> String {
         var line = 0
         var lines: [String] = []
-        forEach {
+        try getSegments().forEach {
             let lineIntro = "line=\(line) "
             let introLen = lineIntro.count
             let introPad = String(repeating: " ", count: introLen)
@@ -247,5 +229,29 @@ extension Sequence where Element: Collection, Element.Element == SourceMap.Segme
             }
         }
         return lines.joined(separator: "\n")
+    }
+}
+
+extension SourceMap: CustomStringConvertible {
+    public var description: String {
+        var str = "SourceMap(v=\(version)"
+        if let file = file {
+            str += #" file="\#(file)""#
+        }
+        if let sourceRoot = sourceRoot {
+            str += #" sourceRoot="\#(sourceRoot)""#
+        }
+        str += " #sources=\(sources.count)"
+        if names.count > 0 {
+            str += " #names=\(names.count)"
+        }
+        func getMapStr() -> String {
+            guard mappingsValid else { return "???" }
+            if mappings.count < 20 {
+                return mappings
+            }
+            return mappings.prefix(17) + "..."
+        }
+        return #"\#(str) mappings="\#(getMapStr())")"#
     }
 }

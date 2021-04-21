@@ -9,7 +9,7 @@
 import Foundation
 
 fileprivate struct SerializedSourceMap: Codable {
-    let version: UInt
+    let version: Int
     let file: String?
     let sourceRoot: String?
     let sources: [String]
@@ -19,8 +19,14 @@ fileprivate struct SerializedSourceMap: Codable {
 }
 
 extension SourceMap {
-    /// Decode a source map from a JSON string as `Data`.
-    public convenience init(data: Data) throws {
+    /// Decode a source map from JSON `Data`.
+    /// - parameter data: The source map JSON.
+    /// - parameter checkMappings: Whether to validate the mappings part of the source map.  By default
+    ///   this is `false` meaning that the mappings are only validated if `getSegments()` is called later on.
+    ///   Mappings validation is somewhat costly in time and memory and is not be necessary for all uses.
+    /// - throws: If the JSON is bad, the version is bad, or if mandatory fields are missing.
+    ///   The mappings aren't decoded until accessed.
+    public convenience init(data: Data, checkMappings: Bool = false) throws {
         let decoded = try JSONDecoder().decode(SerializedSourceMap.self, from: data)
         if decoded.version != SourceMap.VERSION {
             throw SourceMapError.invalidFormat(decoded.version)
@@ -52,14 +58,17 @@ extension SourceMap {
         self.mappings = decoded.mappings
         self.mappingsValid = true
         self.segments = nil
+
+        if checkMappings {
+            _ = try getSegments()
+        }
     }
 
     /// Decode a source map from a JSON string.
     ///
-    /// - throws: If the JSON is bad, the version is bad, or if mandatory fields are missing.
-    ///   The mappings aren't decoded until accessed.
-    public convenience init(string: String) throws {
-        try self.init(data: string.data(using: .utf8)!)
+    /// See `init(data:checkMappings:)`.
+    public convenience init(string: String, checkMappings: Bool = false) throws {
+        try self.init(data: string.data(using: .utf8)!, checkMappings: checkMappings)
     }
 
     /// Validate any customizations and encode the source map as JSON

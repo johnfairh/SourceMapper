@@ -28,8 +28,8 @@ class TestBasics: XCTestCase {
             XCTAssertEqual(1, map.sources.count)
             XCTAssertTrue(map.sources[0].url.hasSuffix("jazzy.css.scss"))
 
-            let mappings = try map.getSegments()
-            print(mappings.mappingsDescription)
+            print(map)
+            print(try map.getSegmentsDescription())
 
             // Check a couple of mapping positions, one towards the start and
             // one at the end to check the mapping accumulators.
@@ -52,6 +52,24 @@ class TestBasics: XCTestCase {
             XCTAssertEqual(601, pos2.line)
             XCTAssertTrue(pos2.column >= 4)
         }
+    }
+
+    func testPrinting() throws {
+        let map = SourceMap()
+        XCTAssertTrue(try map.getSegmentsDescription().isEmpty)
+        XCTAssertEqual(#"SourceMap(v=3 #sources=0 mappings="")"#, map.description)
+
+        map.file = "myfile.css"
+        map.sourceRoot = "../dist"
+        map.sources = [.remote(url: "a.scss")]
+        map.names = ["fred", "barney"]
+        XCTAssertEqual(#"SourceMap(v=3 file="myfile.css" sourceRoot="../dist" #sources=1 #names=2 mappings="???")"#, map.description)
+
+        map.segments = [[.init(columns: 0...12, sourcePos: .some(.init(source: 0, line: 0, column: 0, name: 1)))]]
+        let segDesc = try map.getSegmentsDescription()
+        XCTAssertEqual(#"line=0 col=0-12 (source=0 line=0 col=0 name=1)"#, segDesc)
+        _ = try map.encode() // to encode the mapping string
+        XCTAssertTrue(map.description.hasSuffix(#" mappings="AAAAC")"#))
     }
 }
 

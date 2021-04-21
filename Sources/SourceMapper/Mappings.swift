@@ -32,6 +32,8 @@ extension SourceMap {
 
     /// Unpack the `mappings` string
     private func decodeMappings() throws -> [[Segment]] {
+        guard !mappings.isEmpty else { return [] }
+
         var coder = MappingCoder()
 
         return try mappings.split(separator: ";", omittingEmptySubsequences: false).map { line in
