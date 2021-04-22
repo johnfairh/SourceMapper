@@ -77,10 +77,16 @@ public final class SourceMap {
     /// Get the URL of a source, incorporating the `sourceRoot` if set.
     ///
     /// - parameter sourceIndex: The index into `sources` to look up.
-    /// - parameter sourceMapURL: The URL of this source map -- source URLs are calculated
-    ///   relative to this location.
+    /// - parameter sourceMapURL: The absolute URL of this source map -- relative source URLs
+    ///   are interpreted relative to this base.
     public func getSourceURL(sourceIndex: Int, sourceMapURL: URL) -> URL {
-        URL(fileURLWithPath: "/")
+        precondition(sourceIndex < sources.count)
+        let sourceURLString = (sourceRoot ?? "") + sources[sourceIndex].url
+        if let sourceURL = URL(string: sourceURLString),
+           sourceURL.scheme != nil {
+            return sourceURL
+        }
+        return URL(string: sourceURLString, relativeTo: sourceMapURL)!
     }
 
     /// Names that can be associated with segments of the generated code.

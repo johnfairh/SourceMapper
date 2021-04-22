@@ -71,12 +71,22 @@ class TestBasics: XCTestCase {
         _ = try map.encode() // to encode the mapping string
         XCTAssertTrue(map.description.hasSuffix(#" mappings="AAAAC")"#))
     }
-}
 
-extension SourceMap.Source {
-    var url: String {
-        switch self {
-        case .inline(let url, _), .remote(let url): return url
-        }
+    func testSourceURL() throws {
+        let map = SourceMap()
+        map.sources = [.remote(url: "http://host/path/a.scss"),
+                       .remote(url: "../dist/b.scss"),
+                       .remote(url: "c.scss")]
+        let mapURL = URL(fileURLWithPath: "/web/main.map")
+
+        let source1 = map.getSourceURL(sourceIndex: 0, sourceMapURL: mapURL)
+        XCTAssertEqual("http://host/path/a.scss", source1.absoluteString)
+
+        let source2 = map.getSourceURL(sourceIndex: 1, sourceMapURL: mapURL)
+        XCTAssertEqual("file:///dist/b.scss", source2.absoluteString)
+
+        map.sourceRoot = "./../dist/"
+        let source3 = map.getSourceURL(sourceIndex: 2, sourceMapURL: mapURL)
+        XCTAssertEqual("file:///dist/c.scss", source3.absoluteString)
     }
 }
