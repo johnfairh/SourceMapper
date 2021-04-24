@@ -1,0 +1,6 @@
+{
+  "modules" : [
+    "SourceMapper"
+  ],
+  "version" : "1.5.0"
+}

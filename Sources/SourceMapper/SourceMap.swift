@@ -7,14 +7,17 @@
 //
 import Foundation
 
-/// Don't support extension fields ("x_|whatever|"): nobody seems to use them, even the one in the spec
-/// seems unknown today, and it immensely complicates the JSON layer.
+/// A source map describing how each segment of a generated file corresponds to some original source file.
 ///
-/// 1 - open a sourcemap, mess around with it a bit, rewrite it,
-/// 2 - join multiple sourcemaps together
-/// 3 - open a sourcemap and use it, doing location queries including source file locations
-/// 4 - create a new sourcemap from scratch and write it to a file.
+/// The main use cases imagined are:
+///  1. Read a source map `init(data:checkMappings:)` and query it `map(...)`.
+///  2. Read a source map, make minor modifications, write it back `encode(...)`.
+///  3. Create a new source map `init(version:)`, fill in fields, and write it.
 ///
+/// There are two representations of the actual mappings.  The `mappings` property holds
+/// the compacted mapping string that looks like `AAAA;EACA`.   These can be decoded into
+/// arrays of `Segment`s.  These arrays can be very large and time-consuming to create, and
+/// so they are usually generated on-demand via `getSegments()`.
 public final class SourceMap {
     /// Create an empty source map.
     public init(version: Int = SourceMap.VERSION) {
@@ -37,31 +40,25 @@ public final class SourceMap {
     /// The name of the generated code file with which the source map is associated.
     public var file: String?
 
-    /// Value to prepend to each `sources` url before attempting their resolution.
+    /// Value to prepend to each `sources` URL before attempting their resolution.
     public var sourceRoot: String?
 
     /// The location and content of an original source referred to from the source map.
     ///
     /// Use `getSourceURL(...)`to interpret source URLs incorporating `sourceRoot`.
-    public enum Source {
-        case remote(url: String)
-        case inline(url: String, content: String)
-
+    public struct Source {
         /// The URL recorded in the source map for this source.
-        /// - see: `SourceMap.getSourceURL(...)`.
-        public var url: String {
-            switch self {
-            case .remote(let url),
-                 .inline(let url, _): return url
-            }
-        }
+        ///
+        /// See: `SourceMap.getSourceURL(...)`.
+        public let url: String
 
         /// The content, if any, recorded in the source map for this source.
-        public var content: String? {
-            switch self {
-            case .remote: return nil
-            case .inline(_, let content): return content
-            }
+        public let content: String?
+
+        /// Initialize a new Source.
+        public init(url: String, content: String? = nil) {
+            self.url = url
+            self.content = content
         }
     }
 
@@ -76,12 +73,12 @@ public final class SourceMap {
 
     /// Get the URL of a source, incorporating the `sourceRoot` if set.
     ///
-    /// - parameter sourceIndex: The index into `sources` to look up.
+    /// - parameter source: The index into `sources` to look up.
     /// - parameter sourceMapURL: The absolute URL of this source map -- relative source URLs
     ///   are interpreted relative to this base.
-    public func getSourceURL(sourceIndex: Int, sourceMapURL: URL) -> URL {
-        precondition(sourceIndex < sources.count)
-        let sourceURLString = (sourceRoot ?? "") + sources[sourceIndex].url
+    public func getSourceURL(source: Int, sourceMapURL: URL) -> URL {
+        precondition(source < sources.count)
+        let sourceURLString = (sourceRoot ?? "") + sources[source].url
         if let sourceURL = URL(string: sourceURLString),
            sourceURL.scheme != nil {
             return sourceURL
@@ -104,7 +101,7 @@ public final class SourceMap {
         public let source: Int32
         /// 0-based line index into the original source file.
         public let line: Int32
-        /// 0-based column index into line `lineIndex`.
+        /// 0-based column index into line `line`.
         public let column: Int32
         /// 0-based index into `SourceMap.names` of any name associated with
         /// the mapping segment, or `nil` if there is none.
@@ -136,7 +133,7 @@ public final class SourceMap {
         /// 0-based column in the generated code that ends the segment, or `nil`
         /// indicating 'until either the next segment or the end of the line'.
         ///
-        /// This field is optional and advisory - it's not stored in the sourcemap itself, rather
+        /// This field is optional and advisory - it's not stored in the source map itself, rather
         /// calculated (guessed) from the next `firstColumn` value.  Its value is not
         /// used in comparisons between two `Segment`s.
         public internal(set) var lastColumn: Int32?
@@ -170,20 +167,23 @@ public final class SourceMap {
                       sourcePos: sourcePos)
         }
 
-        /// Compare two segments.  The `lastColumn` value is not included.
+        /// Compare two segments.  The `lastColumn` value is not included. :nodoc:
         public static func == (lhs: Segment, rhs: Segment) -> Bool {
             lhs.firstColumn == rhs.firstColumn &&
                 lhs.sourcePos == rhs.sourcePos
         }
 
-        /// Hash the segment.
+        /// Hash the segment. :nodoc:
         public func hash(into hasher: inout Hasher) {
             hasher.combine(firstColumn)
             hasher.combine(sourcePos)
         }
     }
 
-    /// The mappings in their compacted format
+    /// The mappings in their compacted format.
+    ///
+    /// If you use `setSegments(...)` to change the segments then this field is not updated to match
+    /// until the next call to `encode(...)` so be careful reading it during this window.
     public internal(set) var mappings: String
 
     /// Track consistency between `mappings` and `_mappingSegments`.
@@ -215,7 +215,7 @@ extension SourceMap.Segment: CustomStringConvertible {
 extension SourceMap {
     /// A formatted multi-line string describing the mapping segments.
     ///
-    /// - throws: something if the mapping segments can't be decoded from the source.
+    /// - throws: If the mapping segments can't be decoded.
     public func getSegmentsDescription() throws -> String {
         var line = 0
         var lines: [String] = []
@@ -239,6 +239,7 @@ extension SourceMap {
 }
 
 extension SourceMap: CustomStringConvertible {
+    /// A short description of the source map.
     public var description: String {
         var str = "SourceMap(v=\(version)"
         if let file = file {

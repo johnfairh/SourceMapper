@@ -30,7 +30,7 @@ class TestMappings: XCTestCase {
     /// Basic stepping through mappings coder, +ve, -ve, multi-byte, non-zero offsets.
     func testNormalMappingScenarios() throws {
         let map = SourceMap()
-        map.sources = [.remote(url: "source1.css"), .remote(url: "source2.css")]
+        map.sources = [.init(url: "source1.css"), .init(url: "source2.css")]
         map.names = ["Name1", "Name2"]
         let line1: [SourceMap.Segment] = [
             .init(firstColumn: 0),
@@ -48,7 +48,7 @@ class TestMappings: XCTestCase {
     /// Encode failures
     func testEncodeFailures() throws {
         let map = SourceMap()
-        map.sources = [.remote(url: "source1.css")]
+        map.sources = [.init(url: "source1.css")]
 
         map.setSegments([[.init(columns: 0..<8, sourcePos: .some(.init(source: 1, line: 0, column: 0)))]])
         XCTAssertSourceMapError(.invalidSource(1, count: 1)) {
@@ -64,7 +64,7 @@ class TestMappings: XCTestCase {
     /// Map failures
     func testMapFailures() throws {
         let map = SourceMap()
-        map.sources = [.remote(url: "source1.css")]
+        map.sources = [.init(url: "source1.css")]
         map.names = ["name1"]
 
         map.setSegments([

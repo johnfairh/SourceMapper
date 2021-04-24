@@ -14,7 +14,7 @@ public enum SourceMapError: Error, CustomStringConvertible, Equatable {
     /// Source map decoding failed because the `sources` and `sourcesContent` fields have different cardinalities.
     case inconsistentSources(sourcesCount: Int, sourcesContentCount: Int)
 
-    /// Source map decoding failed because of a bad character in the `mappings` field.
+    /// Source map decoding failed because of an invalid character in the `mappings` field.
     case invalidBase64Character(Character)
 
     /// Source map decoding failed because a VLQ sequence does not terminate properly.
@@ -29,7 +29,7 @@ public enum SourceMapError: Error, CustomStringConvertible, Equatable {
     /// Source map encoding failed because a name index is out of range.
     case invalidName(Int, count: Int)
 
-    /// A short human-readable description of the error
+    /// A short human-readable description of the error.
     public var description: String {
         switch self {
         case .invalidFormat(let format):

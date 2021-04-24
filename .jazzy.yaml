@@ -1,0 +1,17 @@
+author: John Fairhurst
+author_url: http://github.com/johnfairh
+copyright: Distributed under the MIT license.  Maintained by [John Fairhurst](mailto:johnfairh@gmail.com).
+readme: README.md
+products:
+  - docs
+  - docset
+code_host: github
+code_host_url: https://github.com/johnfairh/SourceMapper
+code_host_file_url: https://github.com/johnfairh/SourceMapper/blob/main
+clean: true
+sdk: macosx
+theme: fw2020
+deployment_url: https://johnfairh.github.io/SourceMapper/
+build_tool: spm
+modules: SourceMapper
+module_version: v1.0.0

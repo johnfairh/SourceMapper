@@ -13,8 +13,7 @@ extension SourceMap {
     ///
     /// Decodes the mappings if necessary.
     /// - throws: If the mappings are undecodable in some way indicating a corrupt source map.
-    ///   No error is thrown for invalid indicies - an `invalidSegment` is substituted and the offence
-    ///   reported  in  `invalidSegmentReports`.
+    ///   Invalid indices do not cause errors.
     public func getSegments() throws -> [[Segment]] {
         if let segments = segments {
             return segments
@@ -71,13 +70,13 @@ extension SourceMap {
 
     /// Map a location in the generated code to its source.
     ///
-    /// All `name` indicies are guaranteed valid at time of call, any out of range are replaced with
+    /// All `name` indices are guaranteed valid at time of call: any out of range are replaced with
     /// `nil` before being returned.  All `source` indices are either valid at time of call or as
     /// requested via the `invalidSourcePos` parameter.
     ///
     /// - parameter line: 0-based index of the line in the generated code file.
     /// - parameter column: 0-based index of the column in `rowIndex`.
-    /// - parameter invalidSourcePos: value to substitute for any decoded `SourcePos`
+    /// - parameter invalidSourcePos: Value to substitute for any decoded `SourcePos`
     ///     that is invalid, ie. refers to a `source` that is out of range.  Default `nil`.
     /// - throws: If the mappings can't be decoded.  See `getSegments()`.
     /// - returns: The mapping segment, or `nil` if there is no mapping for the row.

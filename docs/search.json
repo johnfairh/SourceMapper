@@ -1,0 +1,240 @@
+{
+  "types\/sourcemap2.html?swift" : {
+    "abstract" : "A source map describing how each segment of a generated file corresponds to some original source file.",
+    "name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#description3" : {
+    "abstract" : "A short description of the source map.",
+    "name" : "description",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#encodecontinueonerror" : {
+    "abstract" : "Validate any customizations and encode the source map as JSON",
+    "name" : "encode(continueOnError:)",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#encodestringcontinueonerror" : {
+    "abstract" : "Validate any customizations and encode the source map as JSON in a string",
+    "name" : "encodeString(continueOnError:)",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#file1" : {
+    "abstract" : "The name of the generated code file with which the source map is associated.",
+    "name" : "file",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#getsegments" : {
+    "abstract" : "One list of Segments for every line in the generated code file.",
+    "name" : "getSegments()",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#getsegmentsdescription" : {
+    "abstract" : "A formatted multi-line string describing the mapping segments.",
+    "name" : "getSegmentsDescription()",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#getsourceurlsourcesourcemapurl" : {
+    "abstract" : "Get the URL of a source, incorporating the sourceRoot if set.",
+    "name" : "getSourceURL(source:sourceMapURL:)",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#initdatacheckmappings" : {
+    "abstract" : "Decode a source map from JSON Data.",
+    "name" : "init(data:checkMappings:)",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#initstringcheckmappings" : {
+    "abstract" : "Decode a source map from a JSON string.",
+    "name" : "init(string:checkMappings:)",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#initversion" : {
+    "abstract" : "Create an empty source map.",
+    "name" : "init(version:)",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#maplinecolumninvalidsourcepos" : {
+    "abstract" : "Map a location in the generated code to its source.",
+    "name" : "map(line:column:invalidSourcePos:)",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#mappings1" : {
+    "abstract" : "The mappings in their compacted format.",
+    "name" : "mappings",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#names1" : {
+    "abstract" : "Names that can be associated with segments of the generated code.",
+    "name" : "names",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#setsegments_" : {
+    "abstract" : "Update the mapping segments.  No validation done against sources or names.",
+    "name" : "setSegments(_:)",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#sourceroot1" : {
+    "abstract" : "Value to prepend to each sources URL before attempting their resolution.",
+    "name" : "sourceRoot",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#sources1" : {
+    "abstract" : "The original sources referred to from the source map.",
+    "name" : "sources",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#version1" : {
+    "abstract" : "The spec version that this source map follows.",
+    "name" : "version",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#version2" : {
+    "abstract" : "The expected version - 3 - of source maps.",
+    "name" : "VERSION",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2\/segment.html?swift" : {
+    "abstract" : "A decoded segment of the source map.",
+    "name" : "Segment",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2\/segment.html?swift#columns" : {
+    "abstract" : "The range of columns covered by this segment, or nil if not known.",
+    "name" : "columns",
+    "parent_name" : "Segment"
+  },
+  "types\/sourcemap2\/segment.html?swift#description2" : {
+    "abstract" : "A short human-readable description of the segment.",
+    "name" : "description",
+    "parent_name" : "Segment"
+  },
+  "types\/sourcemap2\/segment.html?swift#firstcolumn" : {
+    "abstract" : "0-based column in the generated code that starts the segment.",
+    "name" : "firstColumn",
+    "parent_name" : "Segment"
+  },
+  "types\/sourcemap2\/segment.html?swift#initcolumnssourcepos" : {
+    "abstract" : "Initialize a segment from a Range of columns.",
+    "name" : "init(columns:sourcePos:)",
+    "parent_name" : "Segment"
+  },
+  "types\/sourcemap2\/segment.html?swift#initcolumnssourcepos1" : {
+    "abstract" : "Initialize a segment from a ClosedRange of columns.",
+    "name" : "init(columns:sourcePos:)",
+    "parent_name" : "Segment"
+  },
+  "types\/sourcemap2\/segment.html?swift#initfirstcolumnlastcolumnsourcepos" : {
+    "abstract" : "Initialize a segment from column indices.",
+    "name" : "init(firstColumn:lastColumn:sourcePos:)",
+    "parent_name" : "Segment"
+  },
+  "types\/sourcemap2\/segment.html?swift#lastcolumn" : {
+    "abstract" : "0-based column in the generated code that ends the segment, or nil\nindicating ‘until either the next segment or the end of the line’.",
+    "name" : "lastColumn",
+    "parent_name" : "Segment"
+  },
+  "types\/sourcemap2\/segment.html?swift#sourcepos1" : {
+    "abstract" : "The original source position associated with the segment, or nil if there is none.",
+    "name" : "sourcePos",
+    "parent_name" : "Segment"
+  },
+  "types\/sourcemap2\/source.html?swift" : {
+    "abstract" : "The location and content of an original source referred to from the source map.",
+    "name" : "Source",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2\/source.html?swift#content" : {
+    "abstract" : "The content, if any, recorded in the source map for this source.",
+    "name" : "content",
+    "parent_name" : "Source"
+  },
+  "types\/sourcemap2\/source.html?swift#initurlcontent" : {
+    "abstract" : "Initialize a new Source.",
+    "name" : "init(url:content:)",
+    "parent_name" : "Source"
+  },
+  "types\/sourcemap2\/source.html?swift#url" : {
+    "abstract" : "The URL recorded in the source map for this source.",
+    "name" : "url",
+    "parent_name" : "Source"
+  },
+  "types\/sourcemap2\/sourcepos.html?swift" : {
+    "abstract" : "A position in an original source file.  Only has meaning in the context of a SourceMap.",
+    "name" : "SourcePos",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2\/sourcepos.html?swift#column" : {
+    "abstract" : "0-based column index into line line.",
+    "name" : "column",
+    "parent_name" : "SourcePos"
+  },
+  "types\/sourcemap2\/sourcepos.html?swift#description1" : {
+    "abstract" : "A short human-readable description of the position.",
+    "name" : "description",
+    "parent_name" : "SourcePos"
+  },
+  "types\/sourcemap2\/sourcepos.html?swift#initsourcelinecolumnname" : {
+    "abstract" : "Initialize a new SourcePos.",
+    "name" : "init(source:line:column:name:)",
+    "parent_name" : "SourcePos"
+  },
+  "types\/sourcemap2\/sourcepos.html?swift#line" : {
+    "abstract" : "0-based line index into the original source file.",
+    "name" : "line",
+    "parent_name" : "SourcePos"
+  },
+  "types\/sourcemap2\/sourcepos.html?swift#name" : {
+    "abstract" : "0-based index into SourceMap.names of any name associated with\nthe mapping segment, or nil if there is none.",
+    "name" : "name",
+    "parent_name" : "SourcePos"
+  },
+  "types\/sourcemap2\/sourcepos.html?swift#source1" : {
+    "abstract" : "0-based index into SourceMap.sources of the original source.",
+    "name" : "source",
+    "parent_name" : "SourcePos"
+  },
+  "types\/sourcemaperror.html?swift" : {
+    "abstract" : "Error conditions detected by the module.",
+    "name" : "SourceMapError"
+  },
+  "types\/sourcemaperror.html?swift#description" : {
+    "abstract" : "A short human-readable description of the error.",
+    "name" : "description",
+    "parent_name" : "SourceMapError"
+  },
+  "types\/sourcemaperror.html?swift#inconsistentsourcessourcescountsourcescontentcount" : {
+    "abstract" : "Source map decoding failed because the sources and sourcesContent fields have different cardinalities.",
+    "name" : "inconsistentSources(sourcesCount:sourcesContentCount:)",
+    "parent_name" : "SourceMapError"
+  },
+  "types\/sourcemaperror.html?swift#invalidbase64character_" : {
+    "abstract" : "Source map decoding failed because of an invalid character in the mappings field.",
+    "name" : "invalidBase64Character(_:)",
+    "parent_name" : "SourceMapError"
+  },
+  "types\/sourcemaperror.html?swift#invalidformat_" : {
+    "abstract" : "Source map decoding failed because the format field’s value is invalid.",
+    "name" : "invalidFormat(_:)",
+    "parent_name" : "SourceMapError"
+  },
+  "types\/sourcemaperror.html?swift#invalidname_count" : {
+    "abstract" : "Source map encoding failed because a name index is out of range.",
+    "name" : "invalidName(_:count:)",
+    "parent_name" : "SourceMapError"
+  },
+  "types\/sourcemaperror.html?swift#invalidsource_count" : {
+    "abstract" : "Source map encoding failed because a source index is out of range.",
+    "name" : "invalidSource(_:count:)",
+    "parent_name" : "SourceMapError"
+  },
+  "types\/sourcemaperror.html?swift#invalidvlqstringlength_" : {
+    "abstract" : "Source map decoding failed because a VLQ sequence has the wrong number of entries.",
+    "name" : "invalidVLQStringLength(_:)",
+    "parent_name" : "SourceMapError"
+  },
+  "types\/sourcemaperror.html?swift#invalidvlqstringunterminatedvlqsofar" : {
+    "abstract" : "Source map decoding failed because a VLQ sequence does not terminate properly.",
+    "name" : "invalidVLQStringUnterminated(vlq:soFar:)",
+    "parent_name" : "SourceMapError"
+  }
+}

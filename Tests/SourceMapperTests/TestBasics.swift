@@ -61,7 +61,7 @@ class TestBasics: XCTestCase {
 
         map.file = "myfile.css"
         map.sourceRoot = "../dist"
-        map.sources = [.remote(url: "a.scss")]
+        map.sources = [.init(url: "a.scss")]
         map.names = ["fred", "barney"]
         XCTAssertEqual(#"SourceMap(v=3 file="myfile.css" sourceRoot="../dist" #sources=1 #names=2 mappings="???")"#, map.description)
 
@@ -74,19 +74,19 @@ class TestBasics: XCTestCase {
 
     func testSourceURL() throws {
         let map = SourceMap()
-        map.sources = [.remote(url: "http://host/path/a.scss"),
-                       .remote(url: "../dist/b.scss"),
-                       .remote(url: "c.scss")]
+        map.sources = [.init(url: "http://host/path/a.scss"),
+                       .init(url: "../dist/b.scss"),
+                       .init(url: "c.scss")]
         let mapURL = URL(fileURLWithPath: "/web/main.map")
 
-        let source1 = map.getSourceURL(sourceIndex: 0, sourceMapURL: mapURL)
+        let source1 = map.getSourceURL(source: 0, sourceMapURL: mapURL)
         XCTAssertEqual("http://host/path/a.scss", source1.absoluteString)
 
-        let source2 = map.getSourceURL(sourceIndex: 1, sourceMapURL: mapURL)
+        let source2 = map.getSourceURL(source: 1, sourceMapURL: mapURL)
         XCTAssertEqual("file:///dist/b.scss", source2.absoluteString)
 
         map.sourceRoot = "./../dist/"
-        let source3 = map.getSourceURL(sourceIndex: 2, sourceMapURL: mapURL)
+        let source3 = map.getSourceURL(source: 2, sourceMapURL: mapURL)
         XCTAssertEqual("file:///dist/c.scss", source3.absoluteString)
     }
 }
