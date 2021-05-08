@@ -103,6 +103,9 @@ extension SourceMap {
         if #available(macOS 10.13, iOS 11.0, *) {
             encoder.outputFormatting = .sortedKeys
         }
+        #if os(Windows)
+        encoder.outputFormatting = .sortedKeys
+        #endif
         return try encoder.encode(serialized)
     }
 
