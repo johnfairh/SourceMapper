@@ -25,7 +25,13 @@ extension SourceMap: Equatable {
             XCTFail("Can't check equality, lhs broken: \(error)")
             return false
         }
-        return lhsJSON == rhsJSON
+        let eq = lhsJSON == rhsJSON
+        if !eq {
+            print("SourceMap JSON compare failure.")
+            print("lhs=\(lhsJSON)")
+            print("rhs=\(rhsJSON)")
+        }
+        return eq
     }
 }
 
