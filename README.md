@@ -4,7 +4,7 @@ README.md
 Distributed under the MIT license, see LICENSE.
 -->
 
-![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20linux-lightgrey.svg)
+![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-green)
 [![codecov](https://codecov.io/gh/johnfairh/SourceMapper/branch/main/graph/badge.svg?token=0NAP6IA9EB)](https://codecov.io/gh/johnfairh/SourceMapper)
 ![Tests](https://github.com/johnfairh/SourceMapper/workflows/Tests/badge.svg)
 
@@ -43,6 +43,7 @@ No support for:
 * Swift 5.3
 * macOS 10.10 (tested on macOS 11.0 IA64)
 * Linux (tested on Ubuntu 18.04.5)
+* Windows 10, Swift 5.4 (tested in CI only)
 
 ## Installation
 
