@@ -103,6 +103,7 @@ extension SourceMap {
         if #available(macOS 10.13, iOS 11.0, *) {
             encoder.outputFormatting = .sortedKeys
         }
+        // The #available above doesn't fire on Windows...
         #if os(Windows)
         encoder.outputFormatting = .sortedKeys
         #endif
