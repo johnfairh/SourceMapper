@@ -4,7 +4,7 @@ README.md
 Distributed under the MIT license, see LICENSE.
 -->
 
-![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20linux-lightgrey.svg)
+![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-green)
 [![codecov](https://codecov.io/gh/johnfairh/SourceMapper/branch/main/graph/badge.svg?token=0NAP6IA9EB)](https://codecov.io/gh/johnfairh/SourceMapper)
 ![Tests](https://github.com/johnfairh/SourceMapper/workflows/Tests/badge.svg)
 
