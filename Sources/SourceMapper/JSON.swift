@@ -99,7 +99,11 @@ extension SourceMap {
                                              names: names,
                                              mappings: mappings)
 
-        return try JSONEncoder().encode(serialized)
+        let encoder = JSONEncoder()
+        if #available(macOS 10.13, iOS 11.0, *) {
+            encoder.outputFormatting = .sortedKeys
+        }
+        return try encoder.encode(serialized)
     }
 
     /// Validate any customizations and encode the source map as JSON in a string
