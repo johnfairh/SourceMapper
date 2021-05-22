@@ -8,6 +8,9 @@ let package = Package(
       .library(
         name: "SourceMapper",
         targets: ["SourceMapper"]),
+      .executable(
+        name: "srcmapcat",
+        targets: ["Cli"]),
     ],
     targets: [
       .target(
@@ -17,5 +20,8 @@ let package = Package(
         name: "SourceMapperTests",
         dependencies: ["SourceMapper"],
         exclude: ["Fixtures"]),
+      .target(
+        name: "Cli",
+        dependencies: ["SourceMapper"]),
     ]
 )

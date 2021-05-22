@@ -1,17 +1,26 @@
-.PHONY: all build test test_linux shell_linux 
+PREFIX ?= /usr/local
+RELEASE ?= release
+BIN_PATH := $(shell swift build --show-bin-path -c ${RELEASE})
+
+.PHONY: all build test test_linux shell_linux install uninstall
 
 all: build
 
 build:
-	swift build
-
-swifttestflags := --enable-test-discovery --enable-code-coverage
+	swift build -c ${RELEASE}
 
 test:
-	swift test ${swifttestflags}
+	swift test --enable-code-coverage
 
 test_linux:
-	docker run -v `pwd`:`pwd` -w `pwd` --name SourceMapper --rm swift:5.3 make test
+	docker run -v `pwd`:`pwd` -w `pwd` --name SourceMapper --rm swift:5.4 make test
 
 shell_linux:
-	docker run -it -v `pwd`:`pwd` -w `pwd` --name SourceMapper --rm swift:5.3 /bin/bash
+	docker run -it -v `pwd`:`pwd` -w `pwd` --name SourceMapper --rm swift:5.4 /bin/bash
+
+install: build
+	-mkdir -p ${PREFIX}/bin
+	install ${BIN_PATH}/srcmapcat ${PREFIX}/bin
+
+uninstall:
+	rm -f ${PREFIX}/bin/srcmapcat
