@@ -464,3 +464,5 @@ form[role=search] .tt-suggestion.tt-cursor {
 form[role=search] .tt-suggestion:hover .doc-parent-name,
 form[role=search] .tt-suggestion.tt-cursor .doc-parent-name {
   color: #fff; }
+
+/*# sourceMappingURL=jazzy.css.map.libsass */

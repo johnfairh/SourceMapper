@@ -22,9 +22,8 @@ class TestBasics: XCTestCase {
         try ["jazzy.css.map.dart", "jazzy.css.map.libsass"].forEach { fixtureName in
             let map = try SourceMap(fixtureName: fixtureName)
             XCTAssertEqual(SourceMap.VERSION, map.version)
-            if let file = map.file {
-                XCTAssertEqual("jazzy.css.css", file)
-            }
+            let file = try XCTUnwrap(map.file)
+            XCTAssertEqual(fixtureName.replacingOccurrences(of: ".map", with: ""), file)
             XCTAssertEqual(1, map.sources.count)
             XCTAssertTrue(map.sources[0].url.hasSuffix("jazzy.css.scss"))
 
@@ -34,20 +33,12 @@ class TestBasics: XCTestCase {
             // Check a couple of mapping positions, one towards the start and
             // one at the end to check the mapping accumulators.
 
-            // stubborn libsass...
-            let rows: [Int]
-            if fixtureName.contains("dart") {
-                rows = [30, 510]
-            } else {
-                rows = [26, 465]
-            }
-
-            let mapped1 = try XCTUnwrap(try map.map(line: rows[0], column: 22))
+            let mapped1 = try XCTUnwrap(try map.map(line: 26, column: 22))
             let pos1 = try XCTUnwrap(mapped1.sourcePos)
             XCTAssertEqual(25, pos1.line)
             XCTAssertTrue(pos1.column >= 14)
 
-            let mapped2 = try XCTUnwrap(try map.map(line: rows[1], column: 12))
+            let mapped2 = try XCTUnwrap(try map.map(line: 465, column: 12))
             let pos2 = try XCTUnwrap(mapped2.sourcePos)
             XCTAssertEqual(601, pos2.line)
             XCTAssertTrue(pos2.column >= 4)
