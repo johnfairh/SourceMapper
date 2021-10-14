@@ -7,7 +7,6 @@ guard args.count == 2 else {
     exit(1)
 }
 
-
 do {
     let srcmap = try SourceMap(data: Data(contentsOf: URL(fileURLWithPath: args[1])))
     print(srcmap.description)
