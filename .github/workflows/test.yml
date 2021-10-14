@@ -21,7 +21,7 @@ jobs:
     name: macOS 11 tests
     runs-on: macos-11.0
     env:
-      DEVELOPER_DIR: /Applications/Xcode_12.5.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_13.0.app/Contents/Developer
     steps:
       - uses: actions/checkout@v2
       - name: SPM tests
@@ -29,7 +29,9 @@ jobs:
       - name: Normalize coverage info
         run: xcrun llvm-cov export -format lcov .build/debug/SourceMapperPackageTests.xctest/Contents/MacOS/SourceMapperPackageTests -instr-profile .build/debug/codecov/default.profdata -ignore-filename-regex "(Test|checkouts)" > coverage.lcov
       - name: Upload coverage
-        run: bash <(curl -s https://codecov.io/bash) -f coverage.lcov
+        uses: codecov/codecov-action@v2
+        with:
+          files: coverage.lcov
 
   windows:
     name: Windows
