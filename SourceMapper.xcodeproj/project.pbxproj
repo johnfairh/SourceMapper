@@ -10,6 +10,8 @@
 		021281D926590F25000C7256 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 021281D826590F25000C7256 /* main.swift */; };
 		026E4D82261632A200E916BF /* VLQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026E4D81261632A200E916BF /* VLQ.swift */; };
 		026E4D8D26173BDA00E916BF /* TestVLQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026E4D8C26173BDA00E916BF /* TestVLQ.swift */; };
+		02C75624292A2D7500BF4F23 /* SourceMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SourceMapper::SourceMapper::Product" /* SourceMapper.framework */; };
+		02C75625292A2D7500BF4F23 /* SourceMapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = "SourceMapper::SourceMapper::Product" /* SourceMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		02DD86582618F4EE00912DB0 /* SourceMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DD86572618F4EE00912DB0 /* SourceMap.swift */; };
 		02DD865E261E0F5A00912DB0 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DD865D261E0F5A00912DB0 /* JSON.swift */; };
 		02DD8662261E226F00912DB0 /* TestBasics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DD8661261E226F00912DB0 /* TestBasics.swift */; };
@@ -29,6 +31,13 @@
 			remoteGlobalIDString = "SourceMapper::SourceMapper";
 			remoteInfo = SourceMapper;
 		};
+		02C75626292A2D7500BF4F23 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "SourceMapper::SourceMapper";
+			remoteInfo = SourceMapper;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +49,17 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		02C75628292A2D7500BF4F23 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				02C75625292A2D7500BF4F23 /* SourceMapper.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -66,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02C75624292A2D7500BF4F23 /* SourceMapper.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +116,13 @@
 			name = Cli;
 			path = Sources/Cli;
 			sourceTree = SOURCE_ROOT;
+		};
+		02C75623292A2D7500BF4F23 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
 		};
 		OBJ_10 /* Tests */ = {
 			isa = PBXGroup;
@@ -134,6 +162,7 @@
 				OBJ_7 /* Sources */,
 				OBJ_10 /* Tests */,
 				OBJ_14 /* Products */,
+				02C75623292A2D7500BF4F23 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -169,10 +198,12 @@
 				021281D226590F25000C7256 /* Sources */,
 				021281D326590F25000C7256 /* Frameworks */,
 				021281D426590F25000C7256 /* CopyFiles */,
+				02C75628292A2D7500BF4F23 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				02C75627292A2D7500BF4F23 /* PBXTargetDependency */,
 			);
 			name = Cli;
 			productName = Cli;
@@ -283,6 +314,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		02C75627292A2D7500BF4F23 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = "SourceMapper::SourceMapper" /* SourceMapper */;
+			targetProxy = 02C75626292A2D7500BF4F23 /* PBXContainerItemProxy */;
+		};
 		OBJ_44 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "SourceMapper::SourceMapper" /* SourceMapper */;
