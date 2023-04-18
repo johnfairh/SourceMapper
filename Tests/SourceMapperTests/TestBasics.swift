@@ -11,16 +11,16 @@ import XCTest
 /// Basic flows of the use cases
 class TestBasics: XCTestCase {
     func testEmptyRoundTrip() throws {
-        let empty = SourceMap()
+        let empty = SourceMapC()
         let serialized = try empty.encode()
-        let deserialized = try SourceMap(data: serialized)
+        let deserialized = try SourceMapC(data: serialized)
         XCTAssertEqual(empty, deserialized)
     }
 
     func testLoading() throws {
         try ["jazzy.css.map.dart", "jazzy.css.map.libsass"].forEach { fixtureName in
-            let map = try SourceMap(fixtureName: fixtureName)
-            XCTAssertEqual(SourceMap.VERSION, map.version)
+            let map = try SourceMapC(fixtureName: fixtureName)
+            XCTAssertEqual(SourceMapC.VERSION, map.version)
             let file = try XCTUnwrap(map.file)
             XCTAssertEqual(fixtureName.replacingOccurrences(of: ".map", with: ""), file)
             XCTAssertEqual(1, map.sources.count)
@@ -45,7 +45,7 @@ class TestBasics: XCTestCase {
     }
 
     func testPrinting() throws {
-        let map = SourceMap()
+        let map = SourceMapC()
         XCTAssertTrue(try map.getSegmentsDescription().isEmpty)
         XCTAssertEqual(#"SourceMap(v=3 #sources=0 mappings="")"#, map.description)
 
@@ -63,7 +63,7 @@ class TestBasics: XCTestCase {
     }
 
     func testSourceURL() throws {
-        let map = SourceMap()
+        let map = SourceMapC()
         map.sources = [.init(url: "http://host/path/a.scss"),
                        .init(url: "../dist/b.scss"),
                        .init(url: "c.scss")]

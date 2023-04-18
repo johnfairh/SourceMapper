@@ -10,53 +10,47 @@ import Foundation
 extension SourceMap {
     /// One list of `Segment`s for every line in the generated code file.
     ///
-    /// Decodes the mappings if necessary.
-    /// - throws: If the mappings are undecodable in some way indicating a corrupt source map.
-    ///   Invalid indices do not cause errors.
-    public func getSegments() throws -> [[Segment]] {
-        if let segments = segments {
-            return segments
-        }
-        let newSegments = try decodeMappings()
-        segments = newSegments
-        return newSegments
-    }
+    /// - throws: If the mappings are seriously undecodable in some way indicating a
+    ///   corrupt source map.  Invalid indices do not cause errors.
+    public var segments: [[Segment]] {
+        get throws {
+            guard !mappings.isEmpty else { return [] }
 
-    /// Update the mapping segments.  No validation done against `sources` or `names`.
-    public func setSegments(_ segments: [[Segment]]) {
-        self.segments = segments
-        mappingsValid = false
-    }
+            var coder = MappingCoder()
 
-    /// Unpack the `mappings` string
-    private func decodeMappings() throws -> [[Segment]] {
-        guard !mappings.isEmpty else { return [] }
-
-        var coder = MappingCoder()
-
-        return try mappings.split(separator: ";", omittingEmptySubsequences: false).map { line in
-            coder.newLine()
-            var lineSegs = try line.split(separator: ",").map {
-                try Segment(values: coder.decodeValues(deltas: try VLQ.decode($0)))
-            }
-            if lineSegs.count > 1 {
-                for i in 0..<lineSegs.count - 1 {
-                    lineSegs[i].lastColumn = lineSegs[i+1].firstColumn - 1
+            return try mappings.split(separator: ";", omittingEmptySubsequences: false).map { line in
+                coder.newLine()
+                var lineSegs = try line.split(separator: ",").map {
+                    try Segment(values: coder.decodeValues(deltas: try VLQ.decode($0)))
                 }
+                if lineSegs.count > 1 {
+                    for i in 0..<lineSegs.count - 1 {
+                        lineSegs[i].lastColumn = lineSegs[i+1].firstColumn - 1
+                    }
+                }
+                return lineSegs
             }
-            return lineSegs
         }
     }
 
-    /// Update the `mappings` string from the segments data
-    func encodeMappings(continueOnError: Bool) throws {
+    /// Update the mappings.
+    ///
+    /// - parameter segments: The segments to replace the current source map's mappings
+    /// - parameter validate: Whether to check `segments` against `sources` or `names`.
+    ///   If this is `false` then any inconsistencies are passed through unchanged to `mappings`.
+    ///
+    ///   The default is `false` which is probably right when working with existing source maps,
+    ///   but if you're creating from scratch it may be more useful to set `true` to catch bugs
+    ///   in your generation code.
+    ///
+    /// - throws: Only if `validate` is set and there is a mismatch.
+    public mutating func set(segments: [[Segment]], validate: Bool = false) throws {
         var coder = MappingCoder()
 
-        precondition(!mappingsValid)
-        let lineStrings = try getSegments().map { line -> String in
+        let lineStrings = try segments.map { line -> String in
             coder.newLine()
             return try line.map { segment in
-                if !continueOnError {
+                if validate {
                     try segment.sourcePos?.check(sourceCount: sources.count, namesCount: names.count)
                 }
                 return VLQ.encode(coder.encodeDeltas(values: segment.values))
@@ -64,62 +58,6 @@ extension SourceMap {
         }
 
         mappings = lineStrings.joined(separator: ";")
-        mappingsValid = true
-    }
-
-    /// Map a location in the generated code to its source.
-    ///
-    /// All `name` indices are guaranteed valid at time of call: any out of range are replaced with
-    /// `nil` before being returned.  All `source` indices are either valid at time of call or as
-    /// requested via the `invalidSourcePos` parameter.
-    ///
-    /// - parameter line: 0-based index of the line in the generated code file.
-    /// - parameter column: 0-based index of the column in `rowIndex`.
-    /// - parameter invalidSourcePos: Value to substitute for any decoded `SourcePos`
-    ///     that is invalid, ie. refers to a `source` that is out of range.  Default `nil`.
-    /// - throws: If the mappings can't be decoded.  See `getSegments()`.
-    /// - returns: The mapping segment, or `nil` if there is no mapping for the row.
-    public func map(line: Int, column: Int, invalidSourcePos: SourcePos? = nil) throws -> Segment? {
-        let segs = try getSegments()
-        guard line < segs.count else {
-            return nil
-        }
-        let rowSegs = segs[line]
-
-        func findSegment() -> Segment? {
-            guard rowSegs.count > 0 else {
-                return nil
-            }
-            guard column >= rowSegs[0].firstColumn else {
-                return nil
-            }
-            // Could binary search but in practice not a lot of entries,
-            // provided we fix the libsass coalescing bug.
-            for n in 0 ..< rowSegs.count {
-                if column < rowSegs[n].firstColumn {
-                    return rowSegs[n - 1]
-                }
-            }
-            return rowSegs.last
-        }
-
-        guard var segment = findSegment() else {
-            return nil
-        }
-
-        if let name = segment.sourcePos?.name,
-           name >= names.count {
-            segment = segment.withoutSourceName
-        }
-
-        guard let sourcePos = segment.sourcePos else {
-            return segment
-        }
-        
-        guard sourcePos.source < sources.count else {
-            return segment.with(sourcePos: invalidSourcePos)
-        }
-        return segment
     }
 }
 

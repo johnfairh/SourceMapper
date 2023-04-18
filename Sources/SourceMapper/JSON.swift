@@ -20,12 +20,8 @@ fileprivate struct SerializedSourceMap: Codable {
 extension SourceMap {
     /// Decode a source map from JSON `Data`.
     /// - parameter data: The source map JSON.
-    /// - parameter checkMappings: Whether to validate the mappings part of the source map.  By default
-    ///   this is `false` meaning that the mappings are only validated if `getSegments()` is called later on.
-    ///   Mappings validation is somewhat costly in time and memory and is not necessary for all uses.
-    /// - throws: If the JSON is bad, the version is bad, or if mandatory fields are missing.  Some error if
-    ///   `checkMappings` is set and the mappings are invalid.
-    public convenience init(data: Data, checkMappings: Bool = false) throws {
+    /// - throws: If the JSON is bad, the version is bad, or if mandatory fields are missing.
+    public init(data: Data) throws {
         let decoded = try JSONDecoder().decode(SerializedSourceMap.self, from: data)
         if decoded.version != SourceMap.VERSION {
             throw SourceMapError.invalidFormat(decoded.version)
@@ -46,42 +42,25 @@ extension SourceMap {
         }
 
         self.sources = zip(decoded.sources, contents).map {
-            Source(url: $0, content: $1)
+            SourceMap.Source(url: $0, content: $1)
         }
 
         self.names = decoded.names
 
         self.mappings = decoded.mappings
-        self.mappingsValid = true
-        self.segments = nil
-
-        if checkMappings {
-            _ = try getSegments()
-        }
     }
 
     /// Decode a source map from a JSON string.
     ///
-    /// See `init(data:checkMappings:)`.
-    public convenience init(string: String, checkMappings: Bool = false) throws {
-        try self.init(data: string.data(using: .utf8)!, checkMappings: checkMappings)
+    /// See `init(data:)`.
+    public init(string: String) throws {
+        try self.init(data: string.data(using: .utf8)!)
     }
 
-    /// Validate any customizations and encode the source map as JSON
+    /// Encode the source map as JSON
     ///
-    /// - parameter continueOnError: If `false` then any inconsistencies in the mappings
-    ///   cause an error to be thrown, otherwise they are passed through to the JSON format.
-    ///
-    ///   The default is `true` which is probably right when working with existing source maps,
-    ///   but if you're creating from scratch it may be more useful to set `false` to catch bugs
-    ///   in your generation code.
-    ///
-    /// - throws: If `continueOnError` is `false` and there is an error; or if JSON
-    ///   encoding fails for some reason.
-    public func encode(continueOnError: Bool = true) throws -> Data {
-        if !mappingsValid {
-            try encodeMappings(continueOnError: continueOnError)
-        }
+    /// - throws: If JSON encoding fails for some reason.
+    public func encode() throws -> Data {
         var anyContent = false
         let sourceLists: ([String], [String?]) = sources.reduce(into: ([], [])) { r, s in
             r.0.append(s.url)
@@ -109,10 +88,10 @@ extension SourceMap {
         return try encoder.encode(serialized)
     }
 
-    /// Validate any customizations and encode the source map as JSON in a string
+    /// Encode the source map as JSON in a string
     ///
-    /// See `encode(continueOnError:)`.
-    public func encodeString(continueOnError: Bool = true) throws -> String {
-        String(data: try encode(continueOnError: continueOnError), encoding: .utf8)!
+    /// See `encode()`.
+    public func encodeString() throws -> String {
+        String(data: try encode(), encoding: .utf8)!
     }
 }

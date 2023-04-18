@@ -9,15 +9,16 @@ import Foundation
 /// A source map describing how each segment of a generated file corresponds to some original source file.
 ///
 /// The main use cases imagined are:
-///  1. Read a source map `init(data:checkMappings:)` and query it `map(...)`.
-///  2. Read a source map, make minor modifications, write it back `encode(...)`.
-///  3. Create a new source map `init(version:)`, fill in fields, and write it.
+///  1. Read a source map, make minor modifications, write it back `encode(...)`.
+///  2. Create a new source map `init(version:)`, fill in fields, and write it.
+///  3. Read and unpack a source map `UnpackedSourceMap.init(...)` and query it `UnpackedSourceMap.map(...)`.
 ///
 /// There are two representations of the actual mappings.  The `mappings` property holds
 /// the compacted mapping string that looks like `AAAA;EACA`.   These can be decoded into
-/// arrays of `Segment`s.  These arrays can be very large and time-consuming to create, and
-/// so they are usually generated on-demand via `getSegments()`.
-public final class SourceMap {
+/// or written via arrays of `Segment`s.  These arrays can be very large and time-consuming to create.  The
+/// separate `UnpackedSourceMap` works to cache them and satisfy queries.
+///
+public struct SourceMap: Sendable {
     /// Create an empty source map.
     public init(version: Int = SourceMap.VERSION) {
         self.version = version
@@ -26,15 +27,13 @@ public final class SourceMap {
         sources = []
         names = []
         mappings = ""
-        segments = nil
-        mappingsValid = true
     }
-
-    /// The spec version that this source map follows.
-    public let version: Int
 
     /// The expected version - 3 - of source maps.
     public static let VERSION = 3
+
+    /// The spec version that this source map follows.
+    public let version: Int
 
     /// The name of the generated code file with which the source map is associated.
     public var file: String?
@@ -45,7 +44,7 @@ public final class SourceMap {
     /// The location and content of an original source referred to from the source map.
     ///
     /// Use `getSourceURL(...)`to interpret source URLs incorporating `sourceRoot`.
-    public struct Source {
+    public struct Source: Sendable {
         /// The URL recorded in the source map for this source.
         ///
         /// See: `SourceMap.getSourceURL(...)`.
@@ -62,13 +61,7 @@ public final class SourceMap {
     }
 
     /// The original sources referred to from the source map.
-    public var sources: [Source] {
-        willSet {
-            if newValue.count != sources.count {
-                mappingsValid = false
-            }
-        }
-    }
+    public var sources: [Source]
 
     /// Get the URL of a source, incorporating the `sourceRoot` if set.
     ///
@@ -86,16 +79,15 @@ public final class SourceMap {
     }
 
     /// Names that can be associated with segments of the generated code.
-    public var names: [String] {
-        willSet {
-            if newValue.count != names.count {
-                mappingsValid = false
-            }
-        }
-    }
+    public var names: [String]
+
+    /// The source map's mappings in their compacted format.
+    ///
+    /// Writing to `segments` updates this field.
+    public var mappings: String
 
     /// A position in an original source file.  Only has meaning in the context of a `SourceMap`.
-    public struct SourcePos: Hashable {
+    public struct SourcePos: Hashable, Sendable {
         /// 0-based index into `SourceMap.sources` of the original source.
         public let source: Int32
         /// 0-based line index into the original source file.
@@ -125,7 +117,7 @@ public final class SourceMap {
     /// asserts that range is not related to a source.
     ///
     /// All indices are 0-based.
-    public struct Segment: Hashable {
+    public struct Segment: Hashable, Sendable {
         /// 0-based column in the generated code that starts the segment.
         public let firstColumn: Int32
 
@@ -169,7 +161,7 @@ public final class SourceMap {
         /// Compare two segments.  The `lastColumn` value is not included. :nodoc:
         public static func == (lhs: Segment, rhs: Segment) -> Bool {
             lhs.firstColumn == rhs.firstColumn &&
-                lhs.sourcePos == rhs.sourcePos
+            lhs.sourcePos == rhs.sourcePos
         }
 
         /// Hash the segment. :nodoc:
@@ -178,19 +170,6 @@ public final class SourceMap {
             hasher.combine(sourcePos)
         }
     }
-
-    /// The mappings in their compacted format.
-    ///
-    /// If you use `setSegments(...)` to change the segments then this field is not updated to match
-    /// until the next call to `encode(...)` so be careful reading it during this window.
-    public internal(set) var mappings: String
-
-    /// Track consistency between `mappings` and `_mappingSegments`.
-    /// If `false` then `mappings` need regenerating.
-    internal var mappingsValid: Bool
-
-    /// Cache of decoded mapping segments
-    internal var segments: [[Segment]]?
 }
 
 // MARK: Printers
@@ -211,32 +190,6 @@ extension SourceMap.Segment: CustomStringConvertible {
     }
 }
 
-extension SourceMap {
-    /// A formatted multi-line string describing the mapping segments.
-    ///
-    /// - throws: If the mapping segments can't be decoded.
-    public func getSegmentsDescription() throws -> String {
-        var line = 0
-        var lines: [String] = []
-        try getSegments().forEach {
-            let lineIntro = "line=\(line) "
-            let introLen = lineIntro.count
-            let introPad = String(repeating: " ", count: introLen)
-            var intro = lineIntro
-            line += 1
-            if $0.count == 0 {
-                lines.append(intro)
-            } else {
-                $0.forEach {
-                    lines.append("\(intro)\($0)")
-                    intro = introPad
-                }
-            }
-        }
-        return lines.joined(separator: "\n")
-    }
-}
-
 extension SourceMap: CustomStringConvertible {
     /// A short description of the source map.
     public var description: String {
@@ -252,7 +205,6 @@ extension SourceMap: CustomStringConvertible {
             str += " #names=\(names.count)"
         }
         func getMapStr() -> String {
-            guard mappingsValid else { return "???" }
             if mappings.count < 20 {
                 return mappings
             }

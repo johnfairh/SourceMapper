@@ -35,7 +35,7 @@ extension SourceMap: Equatable {
 }
 
 extension SourceMap {
-    convenience init(url: URL) throws {
+    init(url: URL) throws {
         try self.init(data: try Data(contentsOf: url))
     }
 
@@ -43,7 +43,7 @@ extension SourceMap {
         .deletingLastPathComponent()
         .appendingPathComponent("Fixtures")
 
-    convenience init(fixtureName: String) throws {
+    init(fixtureName: String) throws {
         try self.init(url: Self.fixturesURL.appendingPathComponent(fixtureName))
     }
 }
