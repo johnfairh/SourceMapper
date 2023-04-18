@@ -2,7 +2,6 @@
 //  TestBasics.swift
 //  SourceMapperTests
 //
-//  Copyright 2021 SourceMapper contributors
 //  Licensed under MIT (https://github.com/johnfairh/SourceMapper/blob/main/LICENSE
 //
 
