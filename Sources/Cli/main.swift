@@ -21,7 +21,8 @@ do {
         let hasContent = srcmap.sources[n].content != nil ? " (has content)" : ""
         print("source[\(n)] \(srcmap.sources[n].url)\(hasContent)")
     }
-    print(try srcmap.getSegmentsDescription())
+    let unpacked = try UnpackedSourceMap(srcmap)
+    print(unpacked.segmentsDescription)
 } catch {
     fputs("Error: \(error)\n", stderr)
     exit(2)
