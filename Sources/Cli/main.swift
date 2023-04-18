@@ -1,3 +1,10 @@
+//
+//  main.swift
+//  SourceMapper.Cli - srcmapcat
+//
+//  Licensed under MIT (https://github.com/johnfairh/SourceMapper/blob/main/LICENSE
+//
+
 import SourceMapper
 import Foundation
 

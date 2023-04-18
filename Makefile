@@ -13,10 +13,10 @@ test:
 	swift test --enable-code-coverage
 
 test_linux:
-	docker run -v `pwd`:`pwd` -w `pwd` --name SourceMapper --rm swift:5.5 make test
+	docker run -v `pwd`:`pwd` -w `pwd` --name SourceMapper --rm swift:5.7 make test
 
 shell_linux:
-	docker run -it -v `pwd`:`pwd` -w `pwd` --name SourceMapper --rm swift:5.5 /bin/bash
+	docker run -it -v `pwd`:`pwd` -w `pwd` --name SourceMapper --rm swift:5.7 /bin/bash
 
 install: build
 	-mkdir -p ${PREFIX}/bin
