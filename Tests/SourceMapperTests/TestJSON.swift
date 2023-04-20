@@ -12,7 +12,7 @@ import XCTest
 class TestJSON: XCTestCase {
     func testMissingFields() throws {
         XCTAssertThrows(Swift.DecodingError.self) {
-            let map = try SourceMapC(string: "{}")
+            let map = try SourceMap(string: "{}")
             XCTFail("Managed to decode bad map: \(map)")
         }
     }
@@ -28,7 +28,7 @@ class TestJSON: XCTestCase {
         """
 
         XCTAssertSourceMapError(.invalidFormat(4)) {
-            let map = try SourceMapC(string: badVersionJSON)
+            let map = try SourceMap(string: badVersionJSON)
             XCTFail("Managed to decode bad map: \(map)")
         }
     }
@@ -45,7 +45,7 @@ class TestJSON: XCTestCase {
         """
 
         XCTAssertSourceMapError(.inconsistentSources(sourcesCount: 3, sourcesContentCount: 2)) {
-            let map = try SourceMapC(string: badSourcesJSON)
+            let map = try SourceMap(string: badSourcesJSON)
             XCTFail("Managed to decode bad map: \(map)")
         }
     }
@@ -60,13 +60,13 @@ class TestJSON: XCTestCase {
           "mappings": ""
         }
         """
-        let map = try SourceMapC(string: sourcedJSON)
+        let map = try SourceMap(string: sourcedJSON)
         XCTAssertEqual(2, map.sources.count)
         XCTAssertEqual("contents of a", map.sources[0].content)
         XCTAssertNil(map.sources[1].content)
 
         let encoded = try map.encode()
-        let map2 = try SourceMapC(data: encoded)
+        let map2 = try SourceMap(data: encoded)
         XCTAssertEqual(map, map2)
     }
 
@@ -80,7 +80,7 @@ class TestJSON: XCTestCase {
         }
         """
         XCTAssertSourceMapError(.invalidVLQStringLength([0,0,0])) {
-            _ = try SourceMapC(string: json, checkMappings: true)
+            _ = try SourceMap(string: json).segments
         }
     }
 }
