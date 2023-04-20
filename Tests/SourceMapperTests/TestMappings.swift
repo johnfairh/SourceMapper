@@ -15,20 +15,20 @@ import XCTest
 class TestMappings: XCTestCase {
     /// helper
     func checkRoundtrip(_ map: SourceMap, continueOnError: Bool = false) throws {
-        let serialized = try map.encode(continueOnError: continueOnError)
+        let serialized = try map.encode()
         let newMap = try SourceMap(data: serialized)
         XCTAssertEqual(map, newMap)
-        let mapSegs = try map.getSegments()
-        let newMapSegs = try newMap.getSegments()
+        let mapSegs = try map.segments
+        let newMapSegs = try newMap.segments
         if mapSegs != newMapSegs {
-            print("mapSegs:\n\(try map.getSegmentsDescription())\nnewMapSegs:\n\(try newMap.getSegmentsDescription())")
+            print("mapSegs:\n\(try UnpackedSourceMap(map).segmentsDescription)\nnewMapSegs:\n\(try UnpackedSourceMap(map).segmentsDescription)")
             XCTFail("Map segs not equal")
         }
     }
 
     /// Basic stepping through mappings coder, +ve, -ve, multi-byte, non-zero offsets.
     func testNormalMappingScenarios() throws {
-        let map = SourceMap()
+        var map = SourceMap()
         map.sources = [.init(url: "source1.css"), .init(url: "source2.css")]
         map.names = ["Name1", "Name2"]
         let line1: [SourceMap.Segment] = [
@@ -39,34 +39,32 @@ class TestMappings: XCTestCase {
         let line2: [SourceMap.Segment] = [
             .init(columns: 12...18, sourcePos: SourceMap.SourcePos(source: 0, line: 8, column: 14))
         ]
-        map.setSegments([line1, line2])
+        try map.set(segments: [line1, line2], validate: true)
 
         try checkRoundtrip(map)
     }
 
     /// Encode failures
     func testEncodeFailures() throws {
-        let map = SourceMap()
+        var map = SourceMap()
         map.sources = [.init(url: "source1.css")]
 
-        map.setSegments([[.init(columns: 0..<8, sourcePos: .some(.init(source: 1, line: 0, column: 0)))]])
         XCTAssertSourceMapError(.invalidSource(1, count: 1)) {
-            _ = try map.encode(continueOnError: false)
+            try map.set(segments: [[.init(columns: 0..<8, sourcePos: .some(.init(source: 1, line: 0, column: 0)))]], validate: true)
         }
 
-        map.setSegments([[.init(columns: 0..<8, sourcePos: .some(.init(source: 0, line: 0, column: 0, name: 0)))]])
         XCTAssertSourceMapError(.invalidName(0, count: 0)) {
-            _ = try map.encode(continueOnError: false)
+            try map.set(segments: [[.init(columns: 0..<8, sourcePos: .some(.init(source: 0, line: 0, column: 0, name: 0)))]], validate: true)
         }
     }
 
     /// Map failures
     func testMapFailures() throws {
-        let map = SourceMap()
+        var map = SourceMap()
         map.sources = [.init(url: "source1.css")]
         map.names = ["name1"]
 
-        map.setSegments([
+        try map.set(segments: [
             // line 0 - empty
             [],
             // line 1 - one seg, non-zero offset, no sourcepos
@@ -76,28 +74,30 @@ class TestMappings: XCTestCase {
              .init(columns: 10..<20, sourcePos: .some(.init(source: 0, line: 1, column: 1, name: 1))),
              .init(columns: 20..<30, sourcePos: .some(.init(source: 1, line: 2, column: 2)))
             ]
-        ])
+        ], validate: false)
+
+        let decoded = try UnpackedSourceMap(map)
 
         // line out of range
-        XCTAssertNil(try map.map(line: 3, column: 0))
+        XCTAssertNil(decoded.map(line: 3, column: 0))
 
         // empty line
-        XCTAssertNil(try map.map(line: 0, column: 0))
+        XCTAssertNil(decoded.map(line: 0, column: 0))
 
         // before segs start
-        XCTAssertNil(try map.map(line: 1, column: 4))
-        XCTAssertNotNil(try map.map(line: 1, column: 5))
+        XCTAssertNil(decoded.map(line: 1, column: 4))
+        XCTAssertNotNil(decoded.map(line: 1, column: 5))
 
         // name error correction
-        XCTAssertEqual(0, try map.map(line: 2, column: 8)?.sourcePos?.name)
-        let sourcePos = try XCTUnwrap(try map.map(line: 2, column: 10)?.sourcePos)
+        XCTAssertEqual(0, decoded.map(line: 2, column: 8)?.sourcePos?.name)
+        let sourcePos = try XCTUnwrap(decoded.map(line: 2, column: 10)?.sourcePos)
         XCTAssertNil(sourcePos.name)
 
         // source error correction
-        let segNil = try XCTUnwrap(try map.map(line: 2, column: 20))
+        let segNil = try XCTUnwrap(decoded.map(line: 2, column: 20))
         XCTAssertNil(segNil.sourcePos)
         let markerPos = SourceMap.SourcePos(source: 5, line: 5, column: 5)
-        let segMarker = try XCTUnwrap(try map.map(line: 2, column: 20, invalidSourcePos: markerPos))
+        let segMarker = try XCTUnwrap(decoded.map(line: 2, column: 20, invalidSourcePos: markerPos))
         XCTAssertEqual(markerPos, segMarker.sourcePos)
     }
 
