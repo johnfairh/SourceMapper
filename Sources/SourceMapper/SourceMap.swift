@@ -18,7 +18,7 @@ import Foundation
 /// or written via arrays of ``Segment``s.  These arrays can be very large and time-consuming to create.  The
 /// separate ``UnpackedSourceMap`` type works to cache them and satisfy queries.
 ///
-public struct SourceMap: Sendable {
+public struct SourceMap: Hashable, Sendable {
     /// Create an empty source map.
     public init(version: Int = SourceMap.VERSION) {
         self.version = version
@@ -44,7 +44,7 @@ public struct SourceMap: Sendable {
     /// The location and content of an original source referred to from the source map.
     ///
     /// Use ``getSourceURL(...)`` to interpret source URLs incorporating ``sourceRoot``.
-    public struct Source: Sendable {
+    public struct Source: Hashable, Sendable {
         /// The URL recorded in the source map for this source.
         ///
         /// See: ``SourceMap.getSourceURL(...)``.

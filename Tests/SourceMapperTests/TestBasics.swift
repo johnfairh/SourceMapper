@@ -15,6 +15,7 @@ class TestBasics: XCTestCase {
         let serialized = try empty.encode()
         let deserialized = try SourceMap(serialized)
         XCTAssertEqual(empty, deserialized)
+        try XCTAssertEqual(empty.encodeString(), deserialized.encodeString())
     }
 
     func testLoading() throws {

@@ -9,31 +9,6 @@ import Foundation
 import SourceMapper
 import XCTest
 
-extension SourceMap: Equatable {
-    public static func == (lhs: SourceMap, rhs: SourceMap) -> Bool {
-        let lhsJSON, rhsJSON : String
-        do {
-            lhsJSON = try lhs.encodeString()
-        } catch {
-            XCTFail("Can't check equality, lhs broken: \(error)")
-            return false
-        }
-        do {
-            rhsJSON = try rhs.encodeString()
-        } catch {
-            XCTFail("Can't check equality, lhs broken: \(error)")
-            return false
-        }
-        let eq = lhsJSON == rhsJSON
-        if !eq {
-            print("SourceMap JSON compare failure.")
-            print("lhs=\(lhsJSON)")
-            print("rhs=\(rhsJSON)")
-        }
-        return eq
-    }
-}
-
 extension SourceMap {
     init(url: URL) throws {
         try self.init(try Data(contentsOf: url))
