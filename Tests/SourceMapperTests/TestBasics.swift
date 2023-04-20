@@ -62,7 +62,7 @@ class TestBasics: XCTestCase {
                 .init(columns: 0...12, sourcePos: .some(.init(source: 0, line: 0, column: 0, name: 1))),
                 .init(columns: 13...15, sourcePos: .some(.init(source: 0, line: 1, column: 0, name: 1)))
             ]
-        ], validate: true)
+        ])
         let segDesc = try UnpackedSourceMap(map).segmentsDescription
         XCTAssertEqual("""
                        line=0 col=0-12 (source=0 line=0 col=0 name=1)

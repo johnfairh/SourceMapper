@@ -50,11 +50,11 @@ class TestMappings: XCTestCase {
         map.sources = [.init(url: "source1.css")]
 
         XCTAssertSourceMapError(.invalidSource(1, count: 1)) {
-            try map.set(segments: [[.init(columns: 0..<8, sourcePos: .some(.init(source: 1, line: 0, column: 0)))]], validate: true)
+            try map.set(segments: [[.init(columns: 0..<8, sourcePos: .some(.init(source: 1, line: 0, column: 0)))]])
         }
 
         XCTAssertSourceMapError(.invalidName(0, count: 0)) {
-            try map.set(segments: [[.init(columns: 0..<8, sourcePos: .some(.init(source: 0, line: 0, column: 0, name: 0)))]], validate: true)
+            try map.set(segments: [[.init(columns: 0..<8, sourcePos: .some(.init(source: 0, line: 0, column: 0, name: 0)))]])
         }
     }
 
