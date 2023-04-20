@@ -8,7 +8,9 @@
 import Foundation
 
 extension SourceMap {
-    /// One list of `Segment`s for every line in the generated code file.
+    /// One list of ``Segment``s for every line in the generated code file.
+    ///
+    /// Use ``set(segments:validate:)`` to write this field.
     ///
     /// - throws: If the mappings are seriously undecodable in some way indicating a
     ///   corrupt source map.  Invalid indices do not cause errors.
@@ -36,14 +38,14 @@ extension SourceMap {
     /// Update the mappings.
     ///
     /// - parameter segments: The segments to replace the current source map's mappings
-    /// - parameter validate: Whether to check `segments` against `sources` or `names`.
+    /// - parameter validate: Whether to check ``segments`` against ``sources`` or ``names``.
     ///   If this is `false` then any inconsistencies are passed through unchanged to `mappings`.
     ///
     ///   The default is `false` which is probably right when working with existing source maps,
     ///   but if you're creating from scratch it may be more useful to set `true` to catch bugs
     ///   in your generation code.
     ///
-    /// - throws: Only if `validate` is set and there is a mismatch.
+    /// - throws: Only if ``validate`` is set and there is a mismatch.
     public mutating func set(segments: [[Segment]], validate: Bool = false) throws {
         var coder = MappingCoder()
 

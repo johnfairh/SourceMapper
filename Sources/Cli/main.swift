@@ -15,7 +15,7 @@ guard args.count == 2 else {
 }
 
 do {
-    let srcmap = try SourceMap(data: Data(contentsOf: URL(fileURLWithPath: args[1])))
+    let srcmap = try SourceMap(Data(contentsOf: URL(fileURLWithPath: args[1])))
     print(srcmap.description)
     srcmap.sources.enumerated().forEach { n, src in
         let hasContent = srcmap.sources[n].content != nil ? " (has content)" : ""

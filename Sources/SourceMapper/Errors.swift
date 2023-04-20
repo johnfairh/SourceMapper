@@ -6,7 +6,7 @@
 //
 
 /// Error conditions detected by the module.
-public enum SourceMapError: Error, CustomStringConvertible, Equatable {
+public enum SourceMapError: Error, CustomStringConvertible {
     /// Source map decoding failed because the `format` field's value is invalid.
     case invalidFormat(Int)
 
@@ -48,3 +48,6 @@ public enum SourceMapError: Error, CustomStringConvertible, Equatable {
         }
     }
 }
+
+///:nodoc:
+extension SourceMapError: Equatable {}

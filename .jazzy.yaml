@@ -14,4 +14,10 @@ theme: fw2020
 deployment_url: https://johnfairh.github.io/SourceMapper/
 build_tool: spm
 modules: SourceMapper
-module_version: v1.0.0
+module_version: v2.0.0
+custom_groups:
+  - name: Types
+    children:
+      - SourceMap
+      - UnpackedSourceMap
+      - SourceMapError

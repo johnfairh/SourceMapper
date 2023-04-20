@@ -16,7 +16,7 @@ class TestMappings: XCTestCase {
     /// helper
     func checkRoundtrip(_ map: SourceMap, continueOnError: Bool = false) throws {
         let serialized = try map.encode()
-        let newMap = try SourceMap(data: serialized)
+        let newMap = try SourceMap(serialized)
         XCTAssertEqual(map, newMap)
         let mapSegs = try map.segments
         let newMapSegs = try newMap.segments

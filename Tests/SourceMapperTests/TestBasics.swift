@@ -13,7 +13,7 @@ class TestBasics: XCTestCase {
     func testEmptyRoundTrip() throws {
         let empty = SourceMap()
         let serialized = try empty.encode()
-        let deserialized = try SourceMap(data: serialized)
+        let deserialized = try SourceMap(serialized)
         XCTAssertEqual(empty, deserialized)
     }
 

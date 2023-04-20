@@ -36,7 +36,7 @@ extension SourceMap: Equatable {
 
 extension SourceMap {
     init(url: URL) throws {
-        try self.init(data: try Data(contentsOf: url))
+        try self.init(try Data(contentsOf: url))
     }
 
     static let fixturesURL = URL(fileURLWithPath: #file)

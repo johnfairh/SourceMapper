@@ -18,7 +18,7 @@ public struct UnpackedSourceMap: Sendable {
     /// The expanded mapping data from `sourceMap`
     public let segments: [[SourceMap.Segment]]
 
-    /// Unpack a new source map
+    /// Unpack a new source map and cache the segments.
     public init(_ sourceMap: SourceMap) throws {
         self.sourceMap = sourceMap
         self.segments = try sourceMap.segments
@@ -28,11 +28,11 @@ public struct UnpackedSourceMap: Sendable {
     ///
     /// All `name` indices are guaranteed valid at time of call: any out of range are replaced with
     /// `nil` before being returned.  All `source` indices are either valid at time of call or as
-    /// requested via the `invalidSourcePos` parameter.
+    /// requested via the ``invalidSourcePos`` parameter.
     ///
     /// - parameter line: 0-based index of the line in the generated code file.
     /// - parameter column: 0-based index of the column in `rowIndex`.
-    /// - parameter invalidSourcePos: Value to substitute for any decoded `SourcePos`
+    /// - parameter invalidSourcePos: Value to substitute for any decoded ``SourceMap.SourcePos``
     ///     that is invalid, ie. refers to a `source` that is out of range.  Default `nil`.
     /// - returns: The mapping segment, or `nil` if there is no mapping for the row.
     public func map(line: Int, column: Int, invalidSourcePos: SourceMap.SourcePos? = nil) -> SourceMap.Segment? {
@@ -48,8 +48,7 @@ public struct UnpackedSourceMap: Sendable {
             guard column >= rowSegs[0].firstColumn else {
                 return nil
             }
-            // Could binary search but in practice not a lot of entries,
-            // provided we fix the libsass coalescing bug.
+            // Could binary search but in practice not a lot of entries.
             for n in 0 ..< rowSegs.count {
                 if column < rowSegs[n].firstColumn {
                     return rowSegs[n - 1]
