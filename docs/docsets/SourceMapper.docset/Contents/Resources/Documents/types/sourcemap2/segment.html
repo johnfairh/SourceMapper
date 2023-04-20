@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../../css/fw2020.css">
     
     
-   <title>Segment - SourceMapper v1.0.0 docs</title>
+   <title>Segment - SourceMapper v2.0.0 docs</title>
     
   </head>
   <body class="j2-swift " data-root-path="./../../" data-doc-path="types/sourcemap2/segment.html" data-assets-path="../../">
@@ -21,27 +21,26 @@
 
   <header class="j2-header">
   <div class="navbar navbar-expand navbar-dark j2-titlebar">
-  <a class="sr-only-focusable sr-only font-weight-slightly-bold pr-2" href="#main-content">Skip to main content</a>
-  <a class="nav-item nav-link pl-0 pt-1 pr-2 d-md-none" id="nav-toggle-button" role="button" aria-controls="nav-column" aria-expanded="false" aria-label="Toggle navigation" href="#">
+  <div class="container-fluid ps-0 pe-0">
+  <a class="visually-hidden-focusable visually-hidden fw-slightly-bold pe-2" href="#main-content">Skip to main content</a>
+  <a class="nav-item nav-link ps-0 pt-1 pe-2 d-md-none" id="nav-toggle-button" role="button" aria-controls="nav-column" aria-expanded="false" aria-label="Toggle navigation" href="#">
     <span class="navbar-toggler-icon"></span>
   </a>
 
-  <div style="align-items-baseline">
-    <div class="navbar-brand mr-1 font-weight-slightly-bold">
-      
-      <a href="../../index.html">
-      
-      SourceMapper v1.0.0 docs</a>
-    </div>
+  <div class="navbar-brand me-1 fw-slightly-bold">
     
-    <span class="navbar-text j2-coverage font-weight-slightly-bold small d-none d-lg-inline-block mr-2">(100% documented)</span>
+    <a href="../../index.html">
     
+    SourceMapper v2.0.0 docs</a>
   </div>
+  
+  <span class="navbar-text j2-coverage fw-slightly-bold small d-none d-lg-inline-block me-2">(100% documented)</span>
+  
 
-  <div class="navbar-nav ml-auto justify-content-end flex-fill">
+  <div class="navbar-nav ms-auto justify-content-end flex-fill">
 
     
-    <form class="form-inline d-none d-md-flex" role="search">
+    <form class="d-none d-md-block my-auto pe-2 ps-2" role="search">
       <input class="form-control form-control-sm w-100" type="search" placeHolder="Search" aria-label="Search" aria-keyshortcuts="/" data-search-format="span">
     </form>
     
@@ -69,6 +68,7 @@
 
     
 
+  </div>
   </div>
 </div>
 
@@ -172,6 +172,15 @@
   <li>
     
 
+  <a class="j2-nav-item" href="../../types/unpackedsourcemap.html?swift">UnpackedSourceMap</a>
+
+
+
+  </li>
+  
+  <li>
+    
+
   <a class="j2-nav-item" href="../../types/sourcemaperror.html?swift">SourceMapError</a>
 
 
@@ -209,7 +218,7 @@
             
   <div class="j2-swift">
     <div class="j2-callout-title" role="heading" aria-level="6">Swift</div>
-    <pre><code class="language-swift">public struct Segment: <a href="https://developer.apple.com/documentation/swift/hashable?language=swift">Hashable</a>
+    <pre><code class="language-swift">public struct Segment: <a href="https://developer.apple.com/documentation/swift/hashable?language=swift">Hashable</a>, <a href="https://developer.apple.com/documentation/swift/sendable?language=swift">Sendable</a>
 
 extension Segment: <a href="https://developer.apple.com/documentation/swift/customstringconvertible?language=swift">CustomStringConvertible</a></code></pre>
   </div>
@@ -242,7 +251,7 @@ asserts that range is not related to a source.</p>
           
           
           <nav aria-label="item details" class="j2-main-item-nav">
-            <a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L129-L181">Show on GitHub</a>
+            <a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L120-L172">Show on GitHub</a>
           </nav>
           
           
@@ -252,7 +261,7 @@ asserts that range is not related to a source.</p>
 <div class="j2-swift">
 <hr/>
 <section>
-  <h1 class="sr-only">Topics</h1>
+  <h1 class="visually-hidden">Topics</h1>
   
   <section class="j2-swift">
   
@@ -267,16 +276,16 @@ asserts that range is not related to a source.</p>
   
     <section id="initcolumnssourcepos" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Constructor/init(columns%3A%20Range%3CInt32%3E,%20sourcePos%3A%20SourcePos%3F)" class="dashAnchor j2-item-dash-anchor" data-item-id="initcolumnssourcepos"></a>
-    <h4 class="sr-only">init(columns: Range&lt;Int32&gt;, sourcePos: SourcePos?)</h4>
+    <h4 class="visually-hidden">init(columns: Range&lt;Int32&gt;, sourcePos: SourcePos?)</h4>
     
     
-    <a class="j2-item-title" href="#_initcolumnssourcepos" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_initcolumnssourcepos"><code>
+    <a class="j2-item-title" href="#_initcolumnssourcepos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_initcolumnssourcepos"><code>
         <span class="j2-swift">init<span class="j2-item-secondary">(</span>columns<span class="j2-item-secondary">: Range&lt;Int32&gt;, </span>sourcePos<span class="j2-item-secondary">: SourcePos?)</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_initcolumnssourcepos">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -287,7 +296,7 @@ asserts that range is not related to a source.</p>
               
 
 
-<p>Initialize a segment from a <a href="https://developer.apple.com/documentation/swift/range?language=swift" class="j2-swift"><code>Range</code></a> of columns.</p>
+<p>Initialize a segment from a <a href="https://developer.apple.com/documentation/swift/range?language=swift" class="j2-swift"><code>Range</code></a><a href="https://developer.apple.com/documentation/swift/range?language=objc" class="j2-objc j2-secondary"><code>Range</code></a> of columns.</p>
 
 
 
@@ -298,7 +307,7 @@ asserts that range is not related to a source.</p>
               
   <div class="j2-swift">
     <div class="j2-callout-title" role="heading" aria-level="6">Swift</div>
-    <pre><code class="language-swift">public init(columns: <a href="https://developer.apple.com/documentation/swift/range?language=swift">Range</a>&lt;<a href="https://developer.apple.com/documentation/swift/int32?language=swift">Int32</a>&gt;, sourcePos: SourcePos? = nil)</code></pre>
+    <pre><code class="language-swift">public init(columns: <a href="https://developer.apple.com/documentation/swift/range?language=swift">Range</a>&lt;<a href="https://developer.apple.com/documentation/swift/int32?language=swift">Int32</a>&gt;, sourcePos: <a href="../../types/sourcemap2/sourcepos.html?swift">SourcePos</a>? = nil)</code></pre>
   </div>
 
 
@@ -313,11 +322,11 @@ asserts that range is not related to a source.</p>
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L157-L161">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L148-L152">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -327,16 +336,16 @@ asserts that range is not related to a source.</p>
   
     <section id="initcolumnssourcepos1" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Constructor/init(columns%3A%20ClosedRange%3CInt32%3E,%20sourcePos%3A%20SourcePos%3F)" class="dashAnchor j2-item-dash-anchor" data-item-id="initcolumnssourcepos1"></a>
-    <h4 class="sr-only">init(columns: ClosedRange&lt;Int32&gt;, sourcePos: SourcePos?)</h4>
+    <h4 class="visually-hidden">init(columns: ClosedRange&lt;Int32&gt;, sourcePos: SourcePos?)</h4>
     
     
-    <a class="j2-item-title" href="#_initcolumnssourcepos1" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_initcolumnssourcepos1"><code>
+    <a class="j2-item-title" href="#_initcolumnssourcepos1" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_initcolumnssourcepos1"><code>
         <span class="j2-swift">init<span class="j2-item-secondary">(</span>columns<span class="j2-item-secondary">: ClosedRange&lt;Int32&gt;, </span>sourcePos<span class="j2-item-secondary">: SourcePos?)</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_initcolumnssourcepos1">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -347,7 +356,7 @@ asserts that range is not related to a source.</p>
               
 
 
-<p>Initialize a segment from a <a href="https://developer.apple.com/documentation/swift/closedrange?language=swift" class="j2-swift"><code>ClosedRange</code></a> of columns.</p>
+<p>Initialize a segment from a <a href="https://developer.apple.com/documentation/swift/closedrange?language=swift" class="j2-swift"><code>ClosedRange</code></a><a href="https://developer.apple.com/documentation/swift/closedrange?language=objc" class="j2-objc j2-secondary"><code>ClosedRange</code></a> of columns.</p>
 
 
 
@@ -358,7 +367,7 @@ asserts that range is not related to a source.</p>
               
   <div class="j2-swift">
     <div class="j2-callout-title" role="heading" aria-level="6">Swift</div>
-    <pre><code class="language-swift">public init(columns: <a href="https://developer.apple.com/documentation/swift/closedrange?language=swift">ClosedRange</a>&lt;<a href="https://developer.apple.com/documentation/swift/int32?language=swift">Int32</a>&gt;, sourcePos: SourcePos? = nil)</code></pre>
+    <pre><code class="language-swift">public init(columns: <a href="https://developer.apple.com/documentation/swift/closedrange?language=swift">ClosedRange</a>&lt;<a href="https://developer.apple.com/documentation/swift/int32?language=swift">Int32</a>&gt;, sourcePos: <a href="../../types/sourcemap2/sourcepos.html?swift">SourcePos</a>? = nil)</code></pre>
   </div>
 
 
@@ -373,11 +382,11 @@ asserts that range is not related to a source.</p>
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L164-L168">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L155-L159">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -387,16 +396,16 @@ asserts that range is not related to a source.</p>
   
     <section id="initfirstcolumnlastcolumnsourcepos" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Constructor/init(firstColumn%3A%20Int32,%20lastColumn%3A%20Int32%3F,%20sourcePos%3A%20SourcePos%3F)" class="dashAnchor j2-item-dash-anchor" data-item-id="initfirstcolumnlastcolumnsourcepos"></a>
-    <h4 class="sr-only">init(firstColumn: Int32, lastColumn: Int32?, sourcePos: SourcePos?)</h4>
+    <h4 class="visually-hidden">init(firstColumn: Int32, lastColumn: Int32?, sourcePos: SourcePos?)</h4>
     
     
-    <a class="j2-item-title" href="#_initfirstcolumnlastcolumnsourcepos" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_initfirstcolumnlastcolumnsourcepos"><code>
+    <a class="j2-item-title" href="#_initfirstcolumnlastcolumnsourcepos" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_initfirstcolumnlastcolumnsourcepos"><code>
         <span class="j2-swift">init<span class="j2-item-secondary">(</span>firstColumn<span class="j2-item-secondary">: Int32, </span>lastColumn<span class="j2-item-secondary">: Int32?, </span>sourcePos<span class="j2-item-secondary">: SourcePos?)</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_initfirstcolumnlastcolumnsourcepos">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -419,7 +428,7 @@ asserts that range is not related to a source.</p>
   <div class="j2-swift">
     <div class="j2-callout-title" role="heading" aria-level="6">Swift</div>
     <pre><code class="language-swift">public init(
-    firstColumn: <a href="https://developer.apple.com/documentation/swift/int32?language=swift">Int32</a>, lastColumn: <a href="https://developer.apple.com/documentation/swift/int32?language=swift">Int32</a>? = nil, sourcePos: SourcePos? = nil)</code></pre>
+    firstColumn: <a href="https://developer.apple.com/documentation/swift/int32?language=swift">Int32</a>, lastColumn: <a href="https://developer.apple.com/documentation/swift/int32?language=swift">Int32</a>? = nil, sourcePos: <a href="../../types/sourcemap2/sourcepos.html?swift">SourcePos</a>? = nil)</code></pre>
   </div>
 
 
@@ -434,11 +443,11 @@ asserts that range is not related to a source.</p>
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L150-L154">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L141-L145">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -460,16 +469,16 @@ asserts that range is not related to a source.</p>
   
     <section id="columns" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20columns%3A%20ClosedRange%3CInt32%3E%3F" class="dashAnchor j2-item-dash-anchor" data-item-id="columns"></a>
-    <h4 class="sr-only">var columns: ClosedRange&lt;Int32&gt;?</h4>
+    <h4 class="visually-hidden">var columns: ClosedRange&lt;Int32&gt;?</h4>
     
     
-    <a class="j2-item-title" href="#_columns" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_columns"><code>
+    <a class="j2-item-title" href="#_columns" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_columns"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>columns<span class="j2-item-secondary">: ClosedRange&lt;Int32&gt;?</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_columns">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -506,11 +515,11 @@ asserts that range is not related to a source.</p>
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L142-L144">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L133-L135">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -520,16 +529,16 @@ asserts that range is not related to a source.</p>
   
     <section id="description2" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20description%3A%20String" class="dashAnchor j2-item-dash-anchor" data-item-id="description2"></a>
-    <h4 class="sr-only">var description: String</h4>
+    <h4 class="visually-hidden">var description: String</h4>
     
     
-    <a class="j2-item-title" href="#_description2" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_description2"><code>
+    <a class="j2-item-title" href="#_description2" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_description2"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>description<span class="j2-item-secondary">: String</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_description2">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -566,11 +575,11 @@ asserts that range is not related to a source.</p>
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L208-L212">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L186-L190">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -580,16 +589,16 @@ asserts that range is not related to a source.</p>
   
     <section id="firstcolumn" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20firstColumn%3A%20Int32" class="dashAnchor j2-item-dash-anchor" data-item-id="firstcolumn"></a>
-    <h4 class="sr-only">var firstColumn: Int32</h4>
+    <h4 class="visually-hidden">var firstColumn: Int32</h4>
     
     
-    <a class="j2-item-title" href="#_firstcolumn" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_firstcolumn"><code>
+    <a class="j2-item-title" href="#_firstcolumn" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_firstcolumn"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>firstColumn<span class="j2-item-secondary">: Int32</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_firstcolumn">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -626,11 +635,11 @@ asserts that range is not related to a source.</p>
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L131">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L122">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -640,16 +649,16 @@ asserts that range is not related to a source.</p>
   
     <section id="lastcolumn" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20lastColumn%3A%20Int32%3F" class="dashAnchor j2-item-dash-anchor" data-item-id="lastcolumn"></a>
-    <h4 class="sr-only">var lastColumn: Int32?</h4>
+    <h4 class="visually-hidden">var lastColumn: Int32?</h4>
     
     
-    <a class="j2-item-title" href="#_lastcolumn" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_lastcolumn"><code>
+    <a class="j2-item-title" href="#_lastcolumn" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_lastcolumn"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>lastColumn<span class="j2-item-secondary">: Int32?</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_lastcolumn">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -664,7 +673,7 @@ asserts that range is not related to a source.</p>
 indicating ‘until either the next segment or the end of the line’.</p>
 <p>This field is optional and advisory - it’s not stored in the source map itself, rather
 calculated (guessed) from the next <a href="../../types/sourcemap2/segment.html?swift#firstcolumn"><code>firstColumn</code></a> value.  Its value is not
-used in comparisons between two <code>Segment</code>s.</p>
+used in comparisons between two <a href="../../types/sourcemap2/segment.html?swift"><code>Segment</code></a>s.</p>
 
 
 
@@ -689,11 +698,11 @@ used in comparisons between two <code>Segment</code>s.</p>
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L139">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L130">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -703,16 +712,16 @@ used in comparisons between two <code>Segment</code>s.</p>
   
     <section id="sourcepos1" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20sourcePos%3A%20SourcePos%3F" class="dashAnchor j2-item-dash-anchor" data-item-id="sourcepos1"></a>
-    <h4 class="sr-only">var sourcePos: SourcePos?</h4>
+    <h4 class="visually-hidden">var sourcePos: SourcePos?</h4>
     
     
-    <a class="j2-item-title" href="#_sourcepos1" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_sourcepos1"><code>
+    <a class="j2-item-title" href="#_sourcepos1" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_sourcepos1"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>sourcePos<span class="j2-item-secondary">: SourcePos?</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_sourcepos1">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -734,7 +743,7 @@ used in comparisons between two <code>Segment</code>s.</p>
               
   <div class="j2-swift">
     <div class="j2-callout-title" role="heading" aria-level="6">Swift</div>
-    <pre><code class="language-swift">public let sourcePos: SourcePos?</code></pre>
+    <pre><code class="language-swift">public let sourcePos: <a href="../../types/sourcemap2/sourcepos.html?swift">SourcePos</a>?</code></pre>
   </div>
 
 
@@ -749,11 +758,11 @@ used in comparisons between two <code>Segment</code>s.</p>
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L147">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L138">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -783,7 +792,7 @@ used in comparisons between two <code>Segment</code>s.</p>
   
   
   </div>
-  <div id="pagination-next" class="flex-fill text-right">
+  <div id="pagination-next" class="flex-fill text-end">
   
     <a class="j2-swift" href="../../types/sourcemap2/source.html?swift" aria-keyshortcuts="n">
   Source<span aria-hidden="true"> &raquo;</span>
@@ -846,9 +855,9 @@ used in comparisons between two <code>Segment</code>s.</p>
 
     <footer class="row">
   <div class="col j2-footer small pt-2">
-    <p><p>Distributed under the MIT license.  Maintained by <a href="mailto:johnfairh@gmail.com">John Fairhurst</a>.</p></p>
+    <p>Distributed under the MIT license.  Maintained by <a href="mailto:johnfairh@gmail.com">John Fairhurst</a>.</p>
     
-    <p>Generated by <a class="link" href="https://github.com/johnfairh/Bebop" target="_blank" rel="external">Bebop v1.5.0</a> using the FW2020 theme, based on technology from <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫</a>.</p>
+    <p>Generated by <a class="link" href="https://github.com/johnfairh/Bebop" target="_blank" rel="external noopener">Bebop v1.10.0</a> using the FW2020 theme, based on technology from <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫</a>.</p>
     
   </div>
 </footer>

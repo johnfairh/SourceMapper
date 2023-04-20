@@ -8,14 +8,14 @@
     "name" : "description",
     "parent_name" : "SourceMap"
   },
-  "types\/sourcemap2.html?swift#encodecontinueonerror" : {
-    "abstract" : "Validate any customizations and encode the source map as JSON",
-    "name" : "encode(continueOnError:)",
+  "types\/sourcemap2.html?swift#encode" : {
+    "abstract" : "Encode the source map as JSON",
+    "name" : "encode()",
     "parent_name" : "SourceMap"
   },
-  "types\/sourcemap2.html?swift#encodestringcontinueonerror" : {
-    "abstract" : "Validate any customizations and encode the source map as JSON in a string",
-    "name" : "encodeString(continueOnError:)",
+  "types\/sourcemap2.html?swift#encodestring" : {
+    "abstract" : "Encode the source map as JSON in a string",
+    "name" : "encodeString()",
     "parent_name" : "SourceMap"
   },
   "types\/sourcemap2.html?swift#file1" : {
@@ -23,29 +23,19 @@
     "name" : "file",
     "parent_name" : "SourceMap"
   },
-  "types\/sourcemap2.html?swift#getsegments" : {
-    "abstract" : "One list of Segments for every line in the generated code file.",
-    "name" : "getSegments()",
-    "parent_name" : "SourceMap"
-  },
-  "types\/sourcemap2.html?swift#getsegmentsdescription" : {
-    "abstract" : "A formatted multi-line string describing the mapping segments.",
-    "name" : "getSegmentsDescription()",
-    "parent_name" : "SourceMap"
-  },
   "types\/sourcemap2.html?swift#getsourceurlsourcesourcemapurl" : {
     "abstract" : "Get the URL of a source, incorporating the sourceRoot if set.",
     "name" : "getSourceURL(source:sourceMapURL:)",
     "parent_name" : "SourceMap"
   },
-  "types\/sourcemap2.html?swift#initdatacheckmappings" : {
+  "types\/sourcemap2.html?swift#init_" : {
     "abstract" : "Decode a source map from JSON Data.",
-    "name" : "init(data:checkMappings:)",
+    "name" : "init(_:)",
     "parent_name" : "SourceMap"
   },
-  "types\/sourcemap2.html?swift#initstringcheckmappings" : {
+  "types\/sourcemap2.html?swift#init_1" : {
     "abstract" : "Decode a source map from a JSON string.",
-    "name" : "init(string:checkMappings:)",
+    "name" : "init(_:)",
     "parent_name" : "SourceMap"
   },
   "types\/sourcemap2.html?swift#initversion" : {
@@ -53,13 +43,8 @@
     "name" : "init(version:)",
     "parent_name" : "SourceMap"
   },
-  "types\/sourcemap2.html?swift#maplinecolumninvalidsourcepos" : {
-    "abstract" : "Map a location in the generated code to its source.",
-    "name" : "map(line:column:invalidSourcePos:)",
-    "parent_name" : "SourceMap"
-  },
   "types\/sourcemap2.html?swift#mappings1" : {
-    "abstract" : "The mappings in their compacted format.",
+    "abstract" : "The source map’s mappings in their compacted format.",
     "name" : "mappings",
     "parent_name" : "SourceMap"
   },
@@ -68,9 +53,14 @@
     "name" : "names",
     "parent_name" : "SourceMap"
   },
-  "types\/sourcemap2.html?swift#setsegments_" : {
-    "abstract" : "Update the mapping segments.  No validation done against sources or names.",
-    "name" : "setSegments(_:)",
+  "types\/sourcemap2.html?swift#segments" : {
+    "abstract" : "One list of Segments for every line in the generated code file.",
+    "name" : "segments",
+    "parent_name" : "SourceMap"
+  },
+  "types\/sourcemap2.html?swift#setsegmentsvalidate" : {
+    "abstract" : "Update the mappings.",
+    "name" : "set(segments:validate:)",
     "parent_name" : "SourceMap"
   },
   "types\/sourcemap2.html?swift#sourceroot1" : {
@@ -84,13 +74,13 @@
     "parent_name" : "SourceMap"
   },
   "types\/sourcemap2.html?swift#version1" : {
-    "abstract" : "The spec version that this source map follows.",
-    "name" : "version",
+    "abstract" : "The expected version - 3 - of source maps.",
+    "name" : "VERSION",
     "parent_name" : "SourceMap"
   },
   "types\/sourcemap2.html?swift#version2" : {
-    "abstract" : "The expected version - 3 - of source maps.",
-    "name" : "VERSION",
+    "abstract" : "The spec version that this source map follows.",
+    "name" : "version",
     "parent_name" : "SourceMap"
   },
   "types\/sourcemap2\/segment.html?swift" : {
@@ -236,5 +226,34 @@
     "abstract" : "Source map decoding failed because a VLQ sequence does not terminate properly.",
     "name" : "invalidVLQStringUnterminated(vlq:soFar:)",
     "parent_name" : "SourceMapError"
+  },
+  "types\/unpackedsourcemap.html?swift" : {
+    "abstract" : "A source map that supports efficient mapping queries.",
+    "name" : "UnpackedSourceMap"
+  },
+  "types\/unpackedsourcemap.html?swift#init_2" : {
+    "abstract" : "Unpack a new source map and cache the segments.",
+    "name" : "init(_:)",
+    "parent_name" : "UnpackedSourceMap"
+  },
+  "types\/unpackedsourcemap.html?swift#maplinecolumninvalidsourcepos" : {
+    "abstract" : "Map a location in the generated code to its source.",
+    "name" : "map(line:column:invalidSourcePos:)",
+    "parent_name" : "UnpackedSourceMap"
+  },
+  "types\/unpackedsourcemap.html?swift#segments1" : {
+    "abstract" : "The expanded mapping data from sourceMap",
+    "name" : "segments",
+    "parent_name" : "UnpackedSourceMap"
+  },
+  "types\/unpackedsourcemap.html?swift#segmentsdescription" : {
+    "abstract" : "A formatted multi-line string describing the mapping segments.",
+    "name" : "segmentsDescription",
+    "parent_name" : "UnpackedSourceMap"
+  },
+  "types\/unpackedsourcemap.html?swift#sourcemap4" : {
+    "abstract" : "The base source map",
+    "name" : "sourceMap",
+    "parent_name" : "UnpackedSourceMap"
   }
 }

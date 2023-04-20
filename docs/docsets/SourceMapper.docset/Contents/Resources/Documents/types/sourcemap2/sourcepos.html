@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../../css/fw2020.css">
     
     
-   <title>SourcePos - SourceMapper v1.0.0 docs</title>
+   <title>SourcePos - SourceMapper v2.0.0 docs</title>
     
   </head>
   <body class="j2-swift " data-root-path="./../../" data-doc-path="types/sourcemap2/sourcepos.html" data-assets-path="../../">
@@ -21,27 +21,26 @@
 
   <header class="j2-header">
   <div class="navbar navbar-expand navbar-dark j2-titlebar">
-  <a class="sr-only-focusable sr-only font-weight-slightly-bold pr-2" href="#main-content">Skip to main content</a>
-  <a class="nav-item nav-link pl-0 pt-1 pr-2 d-md-none" id="nav-toggle-button" role="button" aria-controls="nav-column" aria-expanded="false" aria-label="Toggle navigation" href="#">
+  <div class="container-fluid ps-0 pe-0">
+  <a class="visually-hidden-focusable visually-hidden fw-slightly-bold pe-2" href="#main-content">Skip to main content</a>
+  <a class="nav-item nav-link ps-0 pt-1 pe-2 d-md-none" id="nav-toggle-button" role="button" aria-controls="nav-column" aria-expanded="false" aria-label="Toggle navigation" href="#">
     <span class="navbar-toggler-icon"></span>
   </a>
 
-  <div style="align-items-baseline">
-    <div class="navbar-brand mr-1 font-weight-slightly-bold">
-      
-      <a href="../../index.html">
-      
-      SourceMapper v1.0.0 docs</a>
-    </div>
+  <div class="navbar-brand me-1 fw-slightly-bold">
     
-    <span class="navbar-text j2-coverage font-weight-slightly-bold small d-none d-lg-inline-block mr-2">(100% documented)</span>
+    <a href="../../index.html">
     
+    SourceMapper v2.0.0 docs</a>
   </div>
+  
+  <span class="navbar-text j2-coverage fw-slightly-bold small d-none d-lg-inline-block me-2">(100% documented)</span>
+  
 
-  <div class="navbar-nav ml-auto justify-content-end flex-fill">
+  <div class="navbar-nav ms-auto justify-content-end flex-fill">
 
     
-    <form class="form-inline d-none d-md-flex" role="search">
+    <form class="d-none d-md-block my-auto pe-2 ps-2" role="search">
       <input class="form-control form-control-sm w-100" type="search" placeHolder="Search" aria-label="Search" aria-keyshortcuts="/" data-search-format="span">
     </form>
     
@@ -69,6 +68,7 @@
 
     
 
+  </div>
   </div>
 </div>
 
@@ -172,6 +172,15 @@
   <li>
     
 
+  <a class="j2-nav-item" href="../../types/unpackedsourcemap.html?swift">UnpackedSourceMap</a>
+
+
+
+  </li>
+  
+  <li>
+    
+
   <a class="j2-nav-item" href="../../types/sourcemaperror.html?swift">SourceMapError</a>
 
 
@@ -209,7 +218,7 @@
             
   <div class="j2-swift">
     <div class="j2-callout-title" role="heading" aria-level="6">Swift</div>
-    <pre><code class="language-swift">public struct SourcePos: <a href="https://developer.apple.com/documentation/swift/hashable?language=swift">Hashable</a>
+    <pre><code class="language-swift">public struct SourcePos: <a href="https://developer.apple.com/documentation/swift/hashable?language=swift">Hashable</a>, <a href="https://developer.apple.com/documentation/swift/sendable?language=swift">Sendable</a>
 
 extension SourcePos: <a href="https://developer.apple.com/documentation/swift/customstringconvertible?language=swift">CustomStringConvertible</a></code></pre>
   </div>
@@ -239,7 +248,7 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
           
           
           <nav aria-label="item details" class="j2-main-item-nav">
-            <a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L99-L120">Show on GitHub</a>
+            <a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L90-L111">Show on GitHub</a>
           </nav>
           
           
@@ -249,7 +258,7 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
 <div class="j2-swift">
 <hr/>
 <section>
-  <h1 class="sr-only">Topics</h1>
+  <h1 class="visually-hidden">Topics</h1>
   
   <section class="j2-swift">
   
@@ -264,16 +273,16 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
   
     <section id="initsourcelinecolumnname" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Constructor/init(source%3A%20Int32,%20line%3A%20Int32,%20column%3A%20Int32,%20name%3A%20Int32%3F)" class="dashAnchor j2-item-dash-anchor" data-item-id="initsourcelinecolumnname"></a>
-    <h4 class="sr-only">init(source: Int32, line: Int32, column: Int32, name: Int32?)</h4>
+    <h4 class="visually-hidden">init(source: Int32, line: Int32, column: Int32, name: Int32?)</h4>
     
     
-    <a class="j2-item-title" href="#_initsourcelinecolumnname" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_initsourcelinecolumnname"><code>
+    <a class="j2-item-title" href="#_initsourcelinecolumnname" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_initsourcelinecolumnname"><code>
         <span class="j2-swift">init<span class="j2-item-secondary">(</span>source<span class="j2-item-secondary">: Int32, </span>line<span class="j2-item-secondary">: Int32, </span>column<span class="j2-item-secondary">: Int32, </span>name<span class="j2-item-secondary">: Int32?)</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_initsourcelinecolumnname">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -284,7 +293,7 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
               
 
 
-<p>Initialize a new <code>SourcePos</code>.</p>
+<p>Initialize a new <a href="../../types/sourcemap2/sourcepos.html?swift"><code>SourcePos</code></a>.</p>
 
 
 
@@ -314,11 +323,11 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L111-L119">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L102-L110">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -340,16 +349,16 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
   
     <section id="column" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20column%3A%20Int32" class="dashAnchor j2-item-dash-anchor" data-item-id="column"></a>
-    <h4 class="sr-only">var column: Int32</h4>
+    <h4 class="visually-hidden">var column: Int32</h4>
     
     
-    <a class="j2-item-title" href="#_column" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_column"><code>
+    <a class="j2-item-title" href="#_column" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_column"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>column<span class="j2-item-secondary">: Int32</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_column">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -386,11 +395,11 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L105">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L96">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -400,16 +409,16 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
   
     <section id="description1" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20description%3A%20String" class="dashAnchor j2-item-dash-anchor" data-item-id="description1"></a>
-    <h4 class="sr-only">var description: String</h4>
+    <h4 class="visually-hidden">var description: String</h4>
     
     
-    <a class="j2-item-title" href="#_description1" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_description1"><code>
+    <a class="j2-item-title" href="#_description1" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_description1"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>description<span class="j2-item-secondary">: String</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_description1">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -446,11 +455,11 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L201-L203">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L179-L181">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -460,16 +469,16 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
   
     <section id="line" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20line%3A%20Int32" class="dashAnchor j2-item-dash-anchor" data-item-id="line"></a>
-    <h4 class="sr-only">var line: Int32</h4>
+    <h4 class="visually-hidden">var line: Int32</h4>
     
     
-    <a class="j2-item-title" href="#_line" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_line"><code>
+    <a class="j2-item-title" href="#_line" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_line"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>line<span class="j2-item-secondary">: Int32</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_line">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -506,11 +515,11 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L103">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L94">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -520,16 +529,16 @@ extension SourcePos: <a href="https://developer.apple.com/documentation/swift/cu
   
     <section id="name" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20name%3A%20Int32%3F" class="dashAnchor j2-item-dash-anchor" data-item-id="name"></a>
-    <h4 class="sr-only">var name: Int32?</h4>
+    <h4 class="visually-hidden">var name: Int32?</h4>
     
     
-    <a class="j2-item-title" href="#_name" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_name"><code>
+    <a class="j2-item-title" href="#_name" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_name"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>name<span class="j2-item-secondary">: Int32?</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_name">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -567,11 +576,11 @@ the mapping segment, or <code>nil</code> if there is none.</p>
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L108">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L99">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -581,16 +590,16 @@ the mapping segment, or <code>nil</code> if there is none.</p>
   
     <section id="source1" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20source%3A%20Int32" class="dashAnchor j2-item-dash-anchor" data-item-id="source1"></a>
-    <h4 class="sr-only">var source: Int32</h4>
+    <h4 class="visually-hidden">var source: Int32</h4>
     
     
-    <a class="j2-item-title" href="#_source1" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_source1"><code>
+    <a class="j2-item-title" href="#_source1" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_source1"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>source<span class="j2-item-secondary">: Int32</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_source1">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -627,11 +636,11 @@ the mapping segment, or <code>nil</code> if there is none.</p>
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L101">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L92">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -661,14 +670,14 @@ the mapping segment, or <code>nil</code> if there is none.</p>
   
   
   </div>
-  <div id="pagination-next" class="flex-fill text-right">
+  <div id="pagination-next" class="flex-fill text-end">
   
-    <a class="j2-swift" href="../../types/sourcemaperror.html?swift" aria-keyshortcuts="n">
-  SourceMapError<span aria-hidden="true"> &raquo;</span>
+    <a class="j2-swift" href="../../types/unpackedsourcemap.html?swift" aria-keyshortcuts="n">
+  UnpackedSourceMap<span aria-hidden="true"> &raquo;</span>
 </a>
 
-    <a class="j2-objc j2-secondary" href="../../types/sourcemaperror.html?swift" aria-keyshortcuts="n">
-  SourceMapError<span aria-hidden="true"> &raquo;</span>
+    <a class="j2-objc j2-secondary" href="../../types/unpackedsourcemap.html?swift" aria-keyshortcuts="n">
+  UnpackedSourceMap<span aria-hidden="true"> &raquo;</span>
 </a>
 
   
@@ -724,9 +733,9 @@ the mapping segment, or <code>nil</code> if there is none.</p>
 
     <footer class="row">
   <div class="col j2-footer small pt-2">
-    <p><p>Distributed under the MIT license.  Maintained by <a href="mailto:johnfairh@gmail.com">John Fairhurst</a>.</p></p>
+    <p>Distributed under the MIT license.  Maintained by <a href="mailto:johnfairh@gmail.com">John Fairhurst</a>.</p>
     
-    <p>Generated by <a class="link" href="https://github.com/johnfairh/Bebop" target="_blank" rel="external">Bebop v1.5.0</a> using the FW2020 theme, based on technology from <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫</a>.</p>
+    <p>Generated by <a class="link" href="https://github.com/johnfairh/Bebop" target="_blank" rel="external noopener">Bebop v1.10.0</a> using the FW2020 theme, based on technology from <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫</a>.</p>
     
   </div>
 </footer>

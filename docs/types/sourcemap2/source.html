@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../../css/fw2020.css">
     
     
-   <title>Source - SourceMapper v1.0.0 docs</title>
+   <title>Source - SourceMapper v2.0.0 docs</title>
     
   </head>
   <body class="j2-swift " data-root-path="./../../" data-doc-path="types/sourcemap2/source.html" data-assets-path="../../">
@@ -21,27 +21,26 @@
 
   <header class="j2-header">
   <div class="navbar navbar-expand navbar-dark j2-titlebar">
-  <a class="sr-only-focusable sr-only font-weight-slightly-bold pr-2" href="#main-content">Skip to main content</a>
-  <a class="nav-item nav-link pl-0 pt-1 pr-2 d-md-none" id="nav-toggle-button" role="button" aria-controls="nav-column" aria-expanded="false" aria-label="Toggle navigation" href="#">
+  <div class="container-fluid ps-0 pe-0">
+  <a class="visually-hidden-focusable visually-hidden fw-slightly-bold pe-2" href="#main-content">Skip to main content</a>
+  <a class="nav-item nav-link ps-0 pt-1 pe-2 d-md-none" id="nav-toggle-button" role="button" aria-controls="nav-column" aria-expanded="false" aria-label="Toggle navigation" href="#">
     <span class="navbar-toggler-icon"></span>
   </a>
 
-  <div style="align-items-baseline">
-    <div class="navbar-brand mr-1 font-weight-slightly-bold">
-      
-      <a href="../../index.html">
-      
-      SourceMapper v1.0.0 docs</a>
-    </div>
+  <div class="navbar-brand me-1 fw-slightly-bold">
     
-    <span class="navbar-text j2-coverage font-weight-slightly-bold small d-none d-lg-inline-block mr-2">(100% documented)</span>
+    <a href="../../index.html">
     
+    SourceMapper v2.0.0 docs</a>
   </div>
+  
+  <span class="navbar-text j2-coverage fw-slightly-bold small d-none d-lg-inline-block me-2">(100% documented)</span>
+  
 
-  <div class="navbar-nav ml-auto justify-content-end flex-fill">
+  <div class="navbar-nav ms-auto justify-content-end flex-fill">
 
     
-    <form class="form-inline d-none d-md-flex" role="search">
+    <form class="d-none d-md-block my-auto pe-2 ps-2" role="search">
       <input class="form-control form-control-sm w-100" type="search" placeHolder="Search" aria-label="Search" aria-keyshortcuts="/" data-search-format="span">
     </form>
     
@@ -69,6 +68,7 @@
 
     
 
+  </div>
   </div>
 </div>
 
@@ -172,6 +172,15 @@
   <li>
     
 
+  <a class="j2-nav-item" href="../../types/unpackedsourcemap.html?swift">UnpackedSourceMap</a>
+
+
+
+  </li>
+  
+  <li>
+    
+
   <a class="j2-nav-item" href="../../types/sourcemaperror.html?swift">SourceMapError</a>
 
 
@@ -209,7 +218,7 @@
             
   <div class="j2-swift">
     <div class="j2-callout-title" role="heading" aria-level="6">Swift</div>
-    <pre><code class="language-swift">public struct Source</code></pre>
+    <pre><code class="language-swift">public struct Source: <a href="https://developer.apple.com/documentation/swift/hashable?language=swift">Hashable</a>, <a href="https://developer.apple.com/documentation/swift/sendable?language=swift">Sendable</a></code></pre>
   </div>
 
 
@@ -225,7 +234,7 @@
 
 
 <p>The location and content of an original source referred to from the source map.</p>
-<p>Use <a href="../../types/sourcemap2.html?swift#getsourceurlsourcesourcemapurl"><code>getSourceURL(...)</code></a>to interpret source URLs incorporating <a href="../../types/sourcemap2.html?swift#sourceroot1"><code>sourceRoot</code></a>.</p>
+<p>Use <a href="../../types/sourcemap2.html?swift#getsourceurlsourcesourcemapurl"><code>getSourceURL(...)</code></a> to interpret source URLs incorporating <a href="../../types/sourcemap2.html?swift#sourceroot1"><code>sourceRoot</code></a>.</p>
 
 
 
@@ -237,7 +246,7 @@
           
           
           <nav aria-label="item details" class="j2-main-item-nav">
-            <a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L49-L63">Show on GitHub</a>
+            <a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L47-L61">Show on GitHub</a>
           </nav>
           
           
@@ -247,7 +256,7 @@
 <div class="j2-swift">
 <hr/>
 <section>
-  <h1 class="sr-only">Topics</h1>
+  <h1 class="visually-hidden">Topics</h1>
   
   <section class="j2-swift">
   
@@ -262,16 +271,16 @@
   
     <section id="initurlcontent" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Constructor/init(url%3A%20String,%20content%3A%20String%3F)" class="dashAnchor j2-item-dash-anchor" data-item-id="initurlcontent"></a>
-    <h4 class="sr-only">init(url: String, content: String?)</h4>
+    <h4 class="visually-hidden">init(url: String, content: String?)</h4>
     
     
-    <a class="j2-item-title" href="#_initurlcontent" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_initurlcontent"><code>
+    <a class="j2-item-title" href="#_initurlcontent" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_initurlcontent"><code>
         <span class="j2-swift">init<span class="j2-item-secondary">(</span>url<span class="j2-item-secondary">: String, </span>content<span class="j2-item-secondary">: String?)</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_initurlcontent">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -308,11 +317,11 @@
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L59-L62">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L57-L60">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -334,16 +343,16 @@
   
     <section id="content" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20content%3A%20String%3F" class="dashAnchor j2-item-dash-anchor" data-item-id="content"></a>
-    <h4 class="sr-only">var content: String?</h4>
+    <h4 class="visually-hidden">var content: String?</h4>
     
     
-    <a class="j2-item-title" href="#_content" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_content"><code>
+    <a class="j2-item-title" href="#_content" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_content"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>content<span class="j2-item-secondary">: String?</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_content">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -380,11 +389,11 @@
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L56">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L54">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -394,16 +403,16 @@
   
     <section id="url" class="j2-item j2-swift">
     <a name="//apple_ref/cpp/Property/var%20url%3A%20String" class="dashAnchor j2-item-dash-anchor" data-item-id="url"></a>
-    <h4 class="sr-only">var url: String</h4>
+    <h4 class="visually-hidden">var url: String</h4>
     
     
-    <a class="j2-item-title" href="#_url" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="_url"><code>
+    <a class="j2-item-title" href="#_url" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="_url"><code>
         <span class="j2-swift"><span class="j2-item-secondary">var </span>url<span class="j2-item-secondary">: String</span></span>
         
       </code></a>
     <div class="collapse  j2-item-popopen-wrapper" id="_url">
       <div class="j2-item-popopen">
-        <div class="j2-item-popopen-pointer" role="none"></div>
+        <div class="j2-item-popopen-pointer" role="none presentation"></div>
         <div class="j2-item-popopen-body">
           
             <div class="clearfix">
@@ -440,11 +449,11 @@
           <nav class="j2-item-nav" aria-label="item details">
             
             
-            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L53">Show on GitHub</a></span>
+            <span class="j2-item-nav-item"><a href="https://github.com/johnfairh/SourceMapper/blob/main/Sources/SourceMapper/SourceMap.swift#L51">Show on GitHub</a></span>
             
           </nav>
         </div>
-      <div>
+      </div>
     </div>
     
   </section>
@@ -474,7 +483,7 @@
   
   
   </div>
-  <div id="pagination-next" class="flex-fill text-right">
+  <div id="pagination-next" class="flex-fill text-end">
   
     <a class="j2-swift" href="../../types/sourcemap2/sourcepos.html?swift" aria-keyshortcuts="n">
   SourcePos<span aria-hidden="true"> &raquo;</span>
@@ -537,9 +546,9 @@
 
     <footer class="row">
   <div class="col j2-footer small pt-2">
-    <p><p>Distributed under the MIT license.  Maintained by <a href="mailto:johnfairh@gmail.com">John Fairhurst</a>.</p></p>
+    <p>Distributed under the MIT license.  Maintained by <a href="mailto:johnfairh@gmail.com">John Fairhurst</a>.</p>
     
-    <p>Generated by <a class="link" href="https://github.com/johnfairh/Bebop" target="_blank" rel="external">Bebop v1.5.0</a> using the FW2020 theme, based on technology from <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫</a>.</p>
+    <p>Generated by <a class="link" href="https://github.com/johnfairh/Bebop" target="_blank" rel="external noopener">Bebop v1.10.0</a> using the FW2020 theme, based on technology from <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫</a>.</p>
     
   </div>
 </footer>
