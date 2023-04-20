@@ -17,16 +17,19 @@ specification: create, load, query, modify, and save source maps.
 ## Examples
 
 ```swift
-let map = try SourceMap(data: try Data(contentsOf: mapURL))
-let segment = map.map(line: 12, column: 0)
+let map = try SourceMap(Data(contentsOf: mapURL))
+print(map.file)
+
+let unpackedMap = try UnpackedSourceMap(map)
+let segment = unpackedMap.map(line: 12, column: 0)
 ```
 
 ```swift
-let map = SourceMap()
+var map = SourceMap()
 map.sources = [.remote("a.scss")]
 map.sourceRoot = "./../src/"
-map.setSegments(...)
-let mapData = try map.encode()
+try map.set(segments: ..., validate: true)
+let mapData = map.encode()
 ```
 
 ## Documentation
@@ -40,10 +43,10 @@ No support for:
 
 ## Requirements
 
-* Swift 5.3
-* macOS 10.10 (tested on macOS 11.0 IA64)
+* Swift 5.7
+* macOS 10.10 (tested on macOS 12.0 IA64)
 * Linux (tested on Ubuntu 18.04.5)
-* Windows 10, Swift 5.4 (tested in CI only)
+* Windows 10, Swift 5.7 (tested in CI only)
 
 ## Installation
 
@@ -53,7 +56,7 @@ Package dependency:
 ```swift
 .package(name: "SourceMapper",
          url: "https://github.com/johnfairh/SourceMapper.git",
-         from: "1.0.0")
+         from: "2.0.0")
 ```
 
 ## Contributions

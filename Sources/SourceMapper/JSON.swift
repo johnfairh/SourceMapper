@@ -18,10 +18,10 @@ fileprivate struct SerializedSourceMap: Codable {
 }
 
 extension SourceMap {
-    /// Decode a source map from JSON `Data`.
+    /// Decode a source map from JSON ``Data``.
     /// - parameter data: The source map JSON.
     /// - throws: If the JSON is bad, the version is bad, or if mandatory fields are missing.
-    public init(data: Data) throws {
+    public init(_ data: Data) throws {
         let decoded = try JSONDecoder().decode(SerializedSourceMap.self, from: data)
         if decoded.version != SourceMap.VERSION {
             throw SourceMapError.invalidFormat(decoded.version)
@@ -52,14 +52,14 @@ extension SourceMap {
 
     /// Decode a source map from a JSON string.
     ///
-    /// See `init(data:)`.
-    public init(string: String) throws {
-        try self.init(data: string.data(using: .utf8)!)
+    /// See ``init(_:)``
+    public init(_ string: String) throws {
+        try self.init(string.data(using: .utf8)!)
     }
 
     /// Encode the source map as JSON
     ///
-    /// - throws: If JSON encoding fails for some reason.
+    /// - throws: If JSON encoding fails for some JSON reason - does not perform any source-map validation.
     public func encode() throws -> Data {
         var anyContent = false
         let sourceLists: ([String], [String?]) = sources.reduce(into: ([], [])) { r, s in
