@@ -12,7 +12,7 @@ import Foundation
 /// A source map that supports efficient mapping queries.
 ///
 /// This bundles together a `SourceMap` and a cache of its unpacked mapping segments.
-public struct UnpackedSourceMap: Sendable {
+public struct UnpackedSourceMap: Hashable, Sendable {
     /// The base source map
     public let sourceMap: SourceMap
     /// The expanded mapping data from `sourceMap`
