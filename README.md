@@ -61,7 +61,7 @@ Package dependency:
 
 ## Contributions
 
-Welcome: open an issue / johnfairh@gmail.com / @johnfairh
+Welcome: open an issue / johnfairh@gmail.com / @johnfairh@mastodon.social
 
 ## License
 
