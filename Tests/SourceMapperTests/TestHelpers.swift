@@ -14,7 +14,7 @@ extension SourceMap {
         try self.init(try Data(contentsOf: url))
     }
 
-    static let fixturesURL = URL(fileURLWithPath: #file)
+    static let fixturesURL = URL(fileURLWithPath: #filePath)
         .deletingLastPathComponent()
         .appendingPathComponent("Fixtures")
 
