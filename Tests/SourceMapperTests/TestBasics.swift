@@ -6,57 +6,63 @@
 //
 
 @testable import SourceMapper
-import XCTest
+import Testing
+import Foundation
+
+extension Tag {
+    @Tag static var basics: Self
+}
 
 /// Basic flows of the use cases
-class TestBasics: XCTestCase {
+@Suite(.tags(.basics))
+final class TestBasics {
+    @Test
     func testEmptyRoundTrip() throws {
         let empty = SourceMap()
         let serialized = try empty.encode()
         let deserialized = try SourceMap(serialized)
-        XCTAssertEqual(empty, deserialized)
-        try XCTAssertEqual(empty.encodeString(), deserialized.encodeString())
+        #expect(empty == deserialized)
+        #expect(try empty.encodeString() == deserialized.encodeString())
     }
 
-    func testLoading() throws {
-        let files = ["jazzy.css.map.dart", "jazzy.css.map.libsass"]
-        try files.forEach { fixtureName in
-            let map = try SourceMap(fixtureName: fixtureName)
-            XCTAssertEqual(SourceMap.VERSION, map.version)
-            let file = try XCTUnwrap(map.file)
-            XCTAssertEqual(fixtureName.replacingOccurrences(of: ".map", with: ""), file)
-            XCTAssertEqual(1, map.sources.count)
-            XCTAssertTrue(map.sources[0].url.hasSuffix("jazzy.css.scss"))
+    @Test(arguments: ["jazzy.css.map.dart", "jazzy.css.map.libsass"])
+    func testLoading(fixtureName: String) throws {
+        let map = try SourceMap(fixtureName: fixtureName)
+        #expect(map.version == SourceMap.VERSION)
+        let file = try #require(map.file)
+        #expect(file == fixtureName.replacingOccurrences(of: ".map", with: ""))
+        #expect(map.sources.count == 1)
+        #expect(map.sources[0].url.hasSuffix("jazzy.css.scss"))
 
-            print(map)
-            let unpackedMap = try UnpackedSourceMap(map)
-            print(unpackedMap.segmentsDescription)
+        print(map)
+        let unpackedMap = try UnpackedSourceMap(map)
+        print(unpackedMap.segmentsDescription)
 
-            // Check a couple of mapping positions, one towards the start and
-            // one at the end to check the mapping accumulators.
+        // Check a couple of mapping positions, one towards the start and
+        // one at the end to check the mapping accumulators.
 
-            let mapped1 = try XCTUnwrap(unpackedMap.map(line: 26, column: 22))
-            let pos1 = try XCTUnwrap(mapped1.sourcePos)
-            XCTAssertEqual(25, pos1.line)
-            XCTAssertTrue(pos1.column >= 14)
+        let mapped1 = try #require(unpackedMap.map(line: 26, column: 22))
+        let pos1 = try #require(mapped1.sourcePos)
+        #expect(pos1.line == 25)
+        #expect(pos1.column >= 14)
 
-            let mapped2 = try XCTUnwrap(unpackedMap.map(line: 465, column: 12))
-            let pos2 = try XCTUnwrap(mapped2.sourcePos)
-            XCTAssertEqual(601, pos2.line)
-            XCTAssertTrue(pos2.column >= 4)
-        }
+        let mapped2 = try #require(unpackedMap.map(line: 465, column: 12))
+        let pos2 = try #require(mapped2.sourcePos)
+        #expect(pos2.line == 601)
+        #expect(pos2.column >= 4)
     }
 
+    @Test
     func testPrinting() throws {
         var map = SourceMap()
-        XCTAssertTrue(try UnpackedSourceMap(map).segmentsDescription.isEmpty)
-        XCTAssertEqual(#"SourceMap(v=3 #sources=0 mappings="")"#, map.description)
+        try #expect(UnpackedSourceMap(map).segmentsDescription.isEmpty)
+        #expect(map.description == #"SourceMap(v=3 #sources=0 mappings="")"#)
 
         map.file = "myfile.css"
         map.sourceRoot = "../dist"
         map.sources = [.init(url: "a.scss")]
         map.names = ["fred", "barney"]
-        XCTAssertEqual(#"SourceMap(v=3 file="myfile.css" sourceRoot="../dist" #sources=1 #names=2 mappings="")"#, map.description)
+        #expect(map.description == #"SourceMap(v=3 file="myfile.css" sourceRoot="../dist" #sources=1 #names=2 mappings="")"#)
 
         try map.set(segments: [
             [
@@ -65,15 +71,16 @@ class TestBasics: XCTestCase {
             ]
         ])
         let segDesc = try UnpackedSourceMap(map).segmentsDescription
-        XCTAssertEqual("""
-                       line=0 col=0-12 (source=0 line=0 col=0 name=1)
-                              col=13 (source=0 line=1 col=0 name=1)
-                       """, segDesc)
+        #expect(segDesc == """
+                           line=0 col=0-12 (source=0 line=0 col=0 name=1)
+                                  col=13 (source=0 line=1 col=0 name=1)
+                           """)
         _ = try map.encode() // to encode the mapping string
         print(map.description)
-        XCTAssertTrue(map.description.hasSuffix(#" mappings="AAAAC,aACAA")"#))
+        #expect(map.description.hasSuffix(#" mappings="AAAAC,aACAA")"#))
     }
 
+    @Test
     func testSourceURL() throws {
         var map = SourceMap()
         map.sources = [.init(url: "http://host/path/a.scss"),
@@ -82,13 +89,13 @@ class TestBasics: XCTestCase {
         let mapURL = URL(fileURLWithPath: "/web/main.map")
 
         let source1 = map.getSourceURL(source: 0, sourceMapURL: mapURL)
-        XCTAssertEqual("http://host/path/a.scss", source1.absoluteString)
+        #expect(source1.absoluteString == "http://host/path/a.scss")
 
         let source2 = map.getSourceURL(source: 1, sourceMapURL: mapURL)
-        XCTAssertEqual("file:///dist/b.scss", source2.absoluteString)
+        #expect(source2.absoluteString == "file:///dist/b.scss")
 
         map.sourceRoot = "./../dist/"
         let source3 = map.getSourceURL(source: 2, sourceMapURL: mapURL)
-        XCTAssertEqual("file:///dist/c.scss", source3.absoluteString)
+        #expect(source3.absoluteString == "file:///dist/c.scss")
     }
 }
