@@ -16,6 +16,8 @@ jobs:
       image: swift:5.10
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Run tests
         run: swift test
 
@@ -27,6 +29,8 @@ jobs:
         with:
           xcode-version: '16.0-beta'
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: SPM tests
         run: make test
       - name: Normalize coverage info
@@ -46,5 +50,7 @@ jobs:
           branch: swift-5.10-release
           tag: 5.10-RELEASE
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Run tests
         run: swift test -v --enable-test-discovery
