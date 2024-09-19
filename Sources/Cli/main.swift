@@ -6,6 +6,10 @@
 //
 
 import SourceMapper
+
+#if canImport(Glibc)
+@preconcurrency import Glibc
+#endif
 import Foundation
 
 let args = ProcessInfo.processInfo.arguments
