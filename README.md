@@ -43,10 +43,10 @@ No support for:
 
 ## Requirements
 
-* Swift 5.7
-* macOS 10.10 (tested on macOS 12.0 IA64)
+* Swift 6.0
+* macOS 14 (tested on macOS 14.6.1 IA64)
 * Linux (tested on Ubuntu 18.04.5)
-* Windows 10, Swift 5.7 (tested in CI only)
+* Windows 10, Swift 6.0 (tested in CI only)
 
 ## Installation
 
@@ -56,7 +56,7 @@ Package dependency:
 ```swift
 .package(name: "SourceMapper",
          url: "https://github.com/johnfairh/SourceMapper.git",
-         from: "2.0.0")
+         from: "3.0.0")
 ```
 
 ## Contributions
