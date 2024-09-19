@@ -6,17 +6,24 @@
 //
 
 @testable import SourceMapper
-import XCTest
+import Testing
+
+extension Tag {
+    @Tag static var json: Self
+}
 
 /// JSON code/decode logic and error handling
-class TestJSON: XCTestCase {
+@Suite(.tags(.json))
+final class TestJSON {
+    @Test
     func testMissingFields() throws {
-        XCTAssertThrows(Swift.DecodingError.self) {
+        #expect(throws: Swift.DecodingError.self) {
             let map = try SourceMap("{}")
-            XCTFail("Managed to decode bad map: \(map)")
+            print("Bad map decoded: \(map)")
         }
     }
 
+    @Test
     func testBadVersion() throws {
         let badVersionJSON = """
         {
@@ -27,12 +34,13 @@ class TestJSON: XCTestCase {
         }
         """
 
-        XCTAssertSourceMapError(.invalidFormat(4)) {
+        #expect(throws: SourceMapError.invalidFormat(4)) {
             let map = try SourceMap(badVersionJSON)
-            XCTFail("Managed to decode bad map: \(map)")
+            print("Bad map decoded: \(map)")
         }
     }
 
+    @Test
     func testInconsistentSources() throws {
         let badSourcesJSON = """
         {
@@ -44,12 +52,13 @@ class TestJSON: XCTestCase {
         }
         """
 
-        XCTAssertSourceMapError(.inconsistentSources(sourcesCount: 3, sourcesContentCount: 2)) {
+        #expect(throws: SourceMapError.inconsistentSources(sourcesCount: 3, sourcesContentCount: 2)) {
             let map = try SourceMap(badSourcesJSON)
-            XCTFail("Managed to decode bad map: \(map)")
+            print("Bad map decoded: \(map)")
         }
     }
 
+    @Test
     func testSourceContent() throws {
         let sourcedJSON = """
         {
@@ -61,15 +70,16 @@ class TestJSON: XCTestCase {
         }
         """
         let map = try SourceMap(sourcedJSON)
-        XCTAssertEqual(2, map.sources.count)
-        XCTAssertEqual("contents of a", map.sources[0].content)
-        XCTAssertNil(map.sources[1].content)
+        #expect(map.sources.count == 2)
+        #expect("contents of a" == map.sources[0].content)
+        #expect(map.sources[1].content == nil)
 
         let encoded = try map.encode()
         let map2 = try SourceMap(encoded)
-        XCTAssertEqual(map, map2)
+        #expect(map == map2)
     }
 
+    @Test
     func testBadMapping() throws {
         let json = """
         {
@@ -79,7 +89,7 @@ class TestJSON: XCTestCase {
           "mappings": "AAA"
         }
         """
-        XCTAssertSourceMapError(.invalidVLQStringLength([0,0,0])) {
+        #expect(throws: SourceMapError.invalidVLQStringLength([0,0,0])) {
             _ = try SourceMap(json).segments
         }
     }

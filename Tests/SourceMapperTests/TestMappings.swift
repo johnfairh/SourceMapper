@@ -6,27 +6,33 @@
 //
 
 @testable import SourceMapper
-import XCTest
+import Testing
+
+extension Tag {
+    @Tag static var mappings: Self
+}
 
 /// Mappings encode/decode, weird special cases and errors
 ///
 /// So, in TestBasics we verify that we can load actual mappnigs and get correct results out.
 /// Meaning here we can verify round-tripping through mappings and conclude all is well.
-class TestMappings: XCTestCase {
+@Suite(.tags(.mappings))
+final class TestMappings {
     /// helper
     func checkRoundtrip(_ map: SourceMap, continueOnError: Bool = false) throws {
         let serialized = try map.encode()
         let newMap = try SourceMap(serialized)
-        XCTAssertEqual(map, newMap)
+        #expect(newMap == map)
         let mapSegs = try map.segments
         let newMapSegs = try newMap.segments
         if mapSegs != newMapSegs {
             print("mapSegs:\n\(try UnpackedSourceMap(map).segmentsDescription)\nnewMapSegs:\n\(try UnpackedSourceMap(map).segmentsDescription)")
-            XCTFail("Map segs not equal")
+            Issue.record("Map segs not equal")
         }
     }
 
     /// Basic stepping through mappings coder, +ve, -ve, multi-byte, non-zero offsets.
+    @Test
     func testNormalMappingScenarios() throws {
         var map = SourceMap()
         map.sources = [.init(url: "source1.css"), .init(url: "source2.css")]
@@ -45,20 +51,22 @@ class TestMappings: XCTestCase {
     }
 
     /// Encode failures
+    @Test
     func testEncodeFailures() throws {
         var map = SourceMap()
         map.sources = [.init(url: "source1.css")]
 
-        XCTAssertSourceMapError(.invalidSource(1, count: 1)) {
+        #expect(throws: SourceMapError.invalidSource(1, count: 1)) {
             try map.set(segments: [[.init(columns: 0..<8, sourcePos: .some(.init(source: 1, line: 0, column: 0)))]])
         }
 
-        XCTAssertSourceMapError(.invalidName(0, count: 0)) {
+        #expect(throws: SourceMapError.invalidName(0, count: 0)) {
             try map.set(segments: [[.init(columns: 0..<8, sourcePos: .some(.init(source: 0, line: 0, column: 0, name: 0)))]])
         }
     }
 
     /// Map failures
+    @Test
     func testMapFailures() throws {
         var map = SourceMap()
         map.sources = [.init(url: "source1.css")]
@@ -79,37 +87,38 @@ class TestMappings: XCTestCase {
         let decoded = try UnpackedSourceMap(map)
 
         // line out of range
-        XCTAssertNil(decoded.map(line: 3, column: 0))
+        #expect(decoded.map(line: 3, column: 0) == nil)
 
         // empty line
-        XCTAssertNil(decoded.map(line: 0, column: 0))
+        #expect(decoded.map(line: 0, column: 0) == nil)
 
         // before segs start
-        XCTAssertNil(decoded.map(line: 1, column: 4))
-        XCTAssertNotNil(decoded.map(line: 1, column: 5))
+        #expect(decoded.map(line: 1, column: 4) == nil)
+        #expect(decoded.map(line: 1, column: 5) != nil)
 
         // name error correction
-        XCTAssertEqual(0, decoded.map(line: 2, column: 8)?.sourcePos?.name)
-        let sourcePos = try XCTUnwrap(decoded.map(line: 2, column: 10)?.sourcePos)
-        XCTAssertNil(sourcePos.name)
+        #expect(0 == decoded.map(line: 2, column: 8)?.sourcePos?.name)
+        let sourcePos = try #require(decoded.map(line: 2, column: 10)?.sourcePos)
+        #expect(sourcePos.name == nil)
 
         // source error correction
-        let segNil = try XCTUnwrap(decoded.map(line: 2, column: 20))
-        XCTAssertNil(segNil.sourcePos)
+        let segNil = try #require(decoded.map(line: 2, column: 20))
+        #expect(segNil.sourcePos == nil)
         let markerPos = SourceMap.SourcePos(source: 5, line: 5, column: 5)
-        let segMarker = try XCTUnwrap(decoded.map(line: 2, column: 20, invalidSourcePos: markerPos))
-        XCTAssertEqual(markerPos, segMarker.sourcePos)
+        let segMarker = try #require(decoded.map(line: 2, column: 20, invalidSourcePos: markerPos))
+        #expect(markerPos == segMarker.sourcePos)
     }
 
     /// Misc Segment methods
+    @Test
     func testSegment() throws {
         let seg1 = SourceMap.Segment(columns: 1...4)
         let seg2 = SourceMap.Segment(columns: 1...6)
-        XCTAssertEqual(1...4, seg1.columns)
-        XCTAssertEqual(1...6, seg2.columns)
-        XCTAssertEqual(seg1, seg2)
+        #expect(1...4 == seg1.columns)
+        #expect(1...6 == seg2.columns)
+        #expect(seg1 == seg2)
         var dict = [SourceMap.Segment:Bool]()
         dict[seg1] = true
-        XCTAssertTrue(dict[seg2]!)
+        #expect(dict[seg2]!)
     }
 }
