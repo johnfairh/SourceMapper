@@ -119,10 +119,10 @@ enum VLQ {
 /// Base64 utilities
 ///
 /// Working on single units at a time - see header for why.
-/// SIngleton - access through `Base64.shared`.
+/// Singleton - access through `Base64.shared`.
 ///
 /// my guess is that doing these in code will actually be more efficient
-/// than the lookup tables because of icache/dache.
+/// than the lookup tables because of icache/dcache.
 struct Base64 {
     private let encode: [Character] // index UInt6
     private let decode: [UInt8] // index ascii
