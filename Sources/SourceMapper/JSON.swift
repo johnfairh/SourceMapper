@@ -7,7 +7,7 @@
 
 import Foundation
 
-fileprivate struct SerializedSourceMap: Codable {
+private struct SerializedSourceMap: Codable {
     let version: Int
     let file: String?
     let sourceRoot: String?
